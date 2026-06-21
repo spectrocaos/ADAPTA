@@ -1,0 +1,25 @@
+# Dependency folders
+node_modules/
+dist/
+dist-ssr/
+*.local
+
+# Local credentials and API keys
+.env
+.env.local
+.env.*.local
+.env.development
+.env.production
+adapta-area-de-membros/.env
+adapta-area-de-membros/.env.*
+adapta-area-de-membros/node_modules/
+adapta-area-de-membros/dist/
+
+# Logs and system files
+*.log
+npm-debug.log*
+.DS_Store
+
+# Editor settings
+.vscode/
+.idea/

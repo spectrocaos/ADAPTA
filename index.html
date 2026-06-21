@@ -1,0 +1,375 @@
+<html><head><script data-offline-runtime="1">(function(){
+var D = {"entries": [{"b": "KV19JwoKMTA1CltbIndyYi5mciIsIlVFa0t3YiIsIlsyXSIsbnVsbCxudWxsLG51bGwsImdlbmVyaWMiXSxbImRpIiw2NF0sWyJhZi5odHRwcm0iLDYzLCI2MDM4NDM5MTA3MTkzMTk4NzM4IiwxXV0KMjUKW1siZSIsNCxudWxsLG51bGwsMTQxXV0K", "t": "application/json"}, {"b": "KV19JwoKW1tbImYubXQiXSxbImRpIiwzNl0sWyJhZi5odHRwcm0iLDM1LCIzNzIzMjUwMTE2Mzk4OTk3ODI4IiwxXSxbImUiLDQsbnVsbCxudWxsLDkwXV1d", "t": "application/json"}], "keys": {"https://accounts.google.com/v3/signin/_/AccountsSignInUi/data/batchexecute?rpcids=UEkKwb&source-path=%2Fv3%2Fsignin%2Fidentifier&f.sid=3947811558194865530&bl=boq_identityfrontendauthuiserver_20260616.03_p0&hl=en-US&dsh=S-1306621151%3A1781963928160062&_reqid=35929&rt=c": 0, "https://accounts.google.com/v3/signin/_/AccountsSignInUi/data/batchexecute": 0, "https://accounts.google.com/v3/signin/_/AccountsSignInUi/browserinfo?f.sid=3947811558194865530&bl=boq_identityfrontendauthuiserver_20260616.03_p0&hl=en-US&dsh=S-1306621151%3A1781963928160062&_reqid=135929&rt=j": 1, "https://accounts.google.com/v3/signin/_/AccountsSignInUi/browserinfo": 1}};
+var E = D.entries, K = D.keys;
+function entry(u){
+  if (!u) return null;
+  if (K[u] != null) return E[K[u]];
+  try {
+    var x = new URL(u, location.href);
+    if (K[x.href] != null) return E[K[x.href]];
+    var op = x.origin + x.pathname;
+    if (K[op] != null) return E[K[op]];
+  } catch(e){}
+  return null;
+}
+function bytes(e){
+  var s = atob(e.b), a = new Uint8Array(s.length);
+  for (var i=0;i<s.length;i++) a[i] = s.charCodeAt(i);
+  return a;
+}
+window.__offlineDataUri = function(u){
+  var e = entry(u);
+  return e ? ('data:' + e.t + ';base64,' + e.b) : null;
+};
+var _fetch = window.fetch;
+if (_fetch) window.fetch = function(input, init){
+  try {
+    var u = (typeof input === 'string') ? input : (input && input.url);
+    var e = entry(u);
+    if (e) return Promise.resolve(new Response(bytes(e),
+      { status:200, headers:{'Content-Type': e.t} }));
+  } catch(err){}
+  return _fetch.apply(this, arguments);
+};
+var _open = XMLHttpRequest.prototype.open;
+XMLHttpRequest.prototype.open = function(m, u){
+  try { this.__offUrl = u; } catch(e){}
+  return _open.apply(this, arguments);
+};
+var _send = XMLHttpRequest.prototype.send;
+XMLHttpRequest.prototype.send = function(){
+  var e = entry(this.__offUrl);
+  if (!e) return _send.apply(this, arguments);
+  var self = this, txt = atob(e.b);
+  setTimeout(function(){
+    try {
+      Object.defineProperty(self,'readyState',{value:4,configurable:true});
+      Object.defineProperty(self,'status',{value:200,configurable:true});
+      Object.defineProperty(self,'responseText',{value:txt,configurable:true});
+      Object.defineProperty(self,'response',{value:txt,configurable:true});
+    } catch(err){}
+    if (typeof self.onreadystatechange === 'function') self.onreadystatechange();
+    if (typeof self.onload === 'function') self.onload();
+  }, 0);
+};
+})();</script><script data-offline-resolve="1">(function(){
+var ASSET_MAP = {"https://accounts.google.com/v3/signin/identifier?continue=https%3A%2F%2Faistudio.google.com%2Fapp%2Fapi-keys%3Fproject%3Dgen-lang-client-0217235050&dsh=S-1306621151%3A1781963928160062&followup=https%3A%2F%2Faistudio.google.com%2Fapp%2Fapi-keys%3Fproject%3Dgen-lang-client-0217235050&passive=1209600&flowName=GlifWebSignIn&flowEntry=ServiceLogin&ifkv=AcDsRvzO2MSIlaYpdLxgp4-_-WoH0C7pRY0-RdlgqBgXkQolhOa6cuwY53Oqn7edmw1EiwjMTk_z": "assets/39750e1ee72b5786_identifier.html", "https://www.gstatic.com/_/mss/boq-identity/_/js/k=boq-identity.AccountsSignInUi.en_US.6ScBlw9gOxw.es5.O/am=EQ0AAAAwULyQAcD-_28AAAIIsh3wPQugCRAyAAAAAAAAAABgAQAAGgE/d=1/excm=_b,_tp,identifierview/ed=1/dg=0/wt=2/ujg=1/rs=AOaEmlFR7jA1a5YjVK0k0tz0FLQ_AyHRAQ/dti=1/m=_b,_tp": "assets/18949b2bc7640ab6_m__b__tp.js", "https://fonts.gstatic.com/s/googlesans/v62/4UaRrENHsxJlGDuGo1OIlJfC6l_24rlCK1Yo_Iq2vgCIhM907w.woff2": "assets/36a6ee4c19f779d3_4UaRrENHsxJlGDuGo1OIlJfC6l_24r.woff2", "https://www.gstatic.com/_/mss/boq-identity/_/js/k=boq-identity.AccountsSignInUi.en_US.6ScBlw9gOxw.es5.O/ck=boq-identity.AccountsSignInUi.8acDTw4n5J4.L.B1.O/am=EQ0AAAAwULyQAcD-_28AAAIIsh3wPQugCRAyAAAAAAAAAABgAQAAGgE/d=1/exm=_b,_tp/excm=_b,_tp,identifierview/ed=1/wt=2/ujg=1/rs=AOaEmlFNTD66ThTqDudpZN1hB4_eXeW0DQ/ee=ASJRFf:DAnQ7e;Al0B8:kibjWe;DaIJ8c:iAskyc;EVNhjf:pw70Gc;EkYFhd:GwYlN;EmZ2Bf:zr1jrb;JsbNhc:Xd8iUd;K5nYTd:ZDZcre;LBgRLc:XVMNvd;Me32dd:MEeYgc;NJ1rfe:yGfSdd;NPKaK:PVlQOd;NSEoX:lazG7b;Pjplud:EEDORb;QGR0gd:Mlhmy;Qi0VDf:vUyhef;SMDL4c:K0PMbc;SNUn3:ZwDk9d;ScI3Yc:e7Hzgb;UpnZUd:nnwwYc;Uvc8o:VDovNc;UyjXyd:qXkWrc;VlRiDf:j7ZRif;XdiAjb:NLiXbe;YIZmRd:A1yn5d;a56pNe:JEfCwb;cEt90b:ws9Tlc;dIoSBb:SpsfSb;dowIGb:ebZ3mb;eBAeSb:zbML3c;iFQyKf:vfuNJf;lGvXed:Gtn19d;lOO0Vd:OTA3Ae;nTuGK:JKNPM;oGtAuc:sOXFj;oSUNyd:K0PMbc;oXZmbc:tUnxGc;pXdRYb:L9OGUe;qQEoOc:KUM7Z;qafBPd:yDVVkb;qddgKe:xQtZb;sHdTOe:nSePib;twueg:ouk7y;vNjB7d:YTxL4;wR5FRb:siKnQd;wc73nd:kqeOEd;yxTchf:KUM7Z/dti=1/m=byfTOb,lsjVmc,LEikZe": "assets/2a326b42b8b71faf_m_byfTOb_lsjVmc_LEikZe.js", "https://www.gstatic.com/_/mss/boq-identity/_/js/k=boq-identity.AccountsSignInUi.en_US.6ScBlw9gOxw.es5.O/ck=boq-identity.AccountsSignInUi.8acDTw4n5J4.L.B1.O/am=EQ0AAAAwULyQAcD-_28AAAIIsh3wPQugCRAyAAAAAAAAAABgAQAAGgE/d=1/exm=CMcBD,DqMihc,EFQ78c,EN3i8d,Fndnac,GwYlN,IZT63,K0PMbc,K1ZKnb,KUM7Z,L9OGUe,LDQI,LEikZe,MY7mZe,MpJwZc,NLiXbe,PrPYRd,SCuOPb,SD8Jgb,SpsfSb,UUJqVe,Uas9Hd,WpP9Yc,YHI3We,YTxL4,YYmHzb,ZSzced,_b,_tp,byfTOb,cYShmd,cciGGe,eWuMIe,gJzDyc,hc6Ubd,inNHtf,lkFgGf,lsjVmc,lwddkf,m9oV,mvkUhe,n73qwf,oLggrd,qmdT9,siKnQd,t2srLd,tUnxGc,vHEMJe,vfuNJf,vjKJJ,ws9Tlc,xQtZb,xiZRqc,y5vRwf,z0u0L,zbML3c,zr1jrb,zy0vNb/excm=_b,_tp,identifierview/ed=1/wt=2/ujg=1/rs=AOaEmlFNTD66ThTqDudpZN1hB4_eXeW0DQ/ee=ASJRFf:DAnQ7e;Al0B8:kibjWe;DaIJ8c:iAskyc;EVNhjf:pw70Gc;EkYFhd:GwYlN;EmZ2Bf:zr1jrb;JsbNhc:Xd8iUd;K5nYTd:ZDZcre;LBgRLc:XVMNvd;Me32dd:MEeYgc;NJ1rfe:yGfSdd;NPKaK:PVlQOd;NSEoX:lazG7b;Pjplud:EEDORb;QGR0gd:Mlhmy;Qi0VDf:vUyhef;SMDL4c:K0PMbc;SNUn3:ZwDk9d;ScI3Yc:e7Hzgb;UpnZUd:nnwwYc;Uvc8o:VDovNc;UyjXyd:qXkWrc;VlRiDf:j7ZRif;XdiAjb:NLiXbe;YIZmRd:A1yn5d;a56pNe:JEfCwb;cEt90b:ws9Tlc;dIoSBb:SpsfSb;dowIGb:ebZ3mb;eBAeSb:zbML3c;iFQyKf:vfuNJf;lGvXed:Gtn19d;lOO0Vd:OTA3Ae;nTuGK:JKNPM;oGtAuc:sOXFj;oSUNyd:K0PMbc;oXZmbc:tUnxGc;pXdRYb:L9OGUe;qQEoOc:KUM7Z;qafBPd:yDVVkb;qddgKe:xQtZb;sHdTOe:nSePib;twueg:ouk7y;vNjB7d:YTxL4;wR5FRb:siKnQd;wc73nd:kqeOEd;yxTchf:KUM7Z/dti=1/m=UMu52b,rmumx,E87wgc,qPYxq,Tbb4sb,pxq3x,f8Gu1e,soHxf,YgOFye,oqkvIf,aXwZ4c,yRXbo,bTi8wc,ywOR5c,PHUIyb": "assets/46c48fc5b7c0e6a0_m_UMu52b_rmumx_E87wgc_qPYxq_Tb.js", "https://www.gstatic.com/_/mss/boq-identity/_/js/k=boq-identity.AccountsSignInUi.en_US.6ScBlw9gOxw.es5.O/ck=boq-identity.AccountsSignInUi.8acDTw4n5J4.L.B1.O/am=EQ0AAAAwULyQAcD-_28AAAIIsh3wPQugCRAyAAAAAAAAAABgAQAAGgE/d=1/exm=LEikZe,_b,_tp,byfTOb,lsjVmc/excm=_b,_tp,identifierview/ed=1/wt=2/ujg=1/rs=AOaEmlFNTD66ThTqDudpZN1hB4_eXeW0DQ/ee=ASJRFf:DAnQ7e;Al0B8:kibjWe;DaIJ8c:iAskyc;EVNhjf:pw70Gc;EkYFhd:GwYlN;EmZ2Bf:zr1jrb;JsbNhc:Xd8iUd;K5nYTd:ZDZcre;LBgRLc:XVMNvd;Me32dd:MEeYgc;NJ1rfe:yGfSdd;NPKaK:PVlQOd;NSEoX:lazG7b;Pjplud:EEDORb;QGR0gd:Mlhmy;Qi0VDf:vUyhef;SMDL4c:K0PMbc;SNUn3:ZwDk9d;ScI3Yc:e7Hzgb;UpnZUd:nnwwYc;Uvc8o:VDovNc;UyjXyd:qXkWrc;VlRiDf:j7ZRif;XdiAjb:NLiXbe;YIZmRd:A1yn5d;a56pNe:JEfCwb;cEt90b:ws9Tlc;dIoSBb:SpsfSb;dowIGb:ebZ3mb;eBAeSb:zbML3c;iFQyKf:vfuNJf;lGvXed:Gtn19d;lOO0Vd:OTA3Ae;nTuGK:JKNPM;oGtAuc:sOXFj;oSUNyd:K0PMbc;oXZmbc:tUnxGc;pXdRYb:L9OGUe;qQEoOc:KUM7Z;qafBPd:yDVVkb;qddgKe:xQtZb;sHdTOe:nSePib;twueg:ouk7y;vNjB7d:YTxL4;wR5FRb:siKnQd;wc73nd:kqeOEd;yxTchf:KUM7Z/dti=1/m=n73qwf,SCuOPb,IZT63,YYmHzb,vfuNJf,UUJqVe,ws9Tlc,KUM7Z,siKnQd,gJzDyc,cciGGe,m9oV,vjKJJ,y5vRwf,DqMihc,K1ZKnb,ZSzced,lkFgGf,SD8Jgb,mvkUhe,CMcBD,Fndnac,t2srLd,EN3i8d,z0u0L,xiZRqc,L9OGUe,PrPYRd,MpJwZc,cYShmd,hc6Ubd,inNHtf,oLggrd,eWuMIe,WpP9Yc,xQtZb,lwddkf,SpsfSb,tUnxGc,EFQ78c,zbML3c,zr1jrb,vHEMJe,YTxL4,YHI3We,Uas9Hd,zy0vNb,K0PMbc,MY7mZe,qmdT9,GwYlN,NLiXbe,LDQI": "assets/696e6657fe78aa26_m_n73qwf_SCuOPb_IZT63_YYmHzb_v.js", "https://www.gstatic.com/_/mss/boq-identity/_/js/k=boq-identity.AccountsSignInUi.en_US.6ScBlw9gOxw.es5.O/ck=boq-identity.AccountsSignInUi.8acDTw4n5J4.L.B1.O/am=EQ0AAAAwULyQAcD-_28AAAIIsh3wPQugCRAyAAAAAAAAAABgAQAAGgE/d=1/exm=CMcBD,DqMihc,E87wgc,EFQ78c,EN3i8d,Fndnac,GwYlN,IZT63,K0PMbc,K1ZKnb,KUM7Z,L9OGUe,LDQI,LEikZe,MY7mZe,MpJwZc,NLiXbe,PHUIyb,PrPYRd,SCuOPb,SD8Jgb,SpsfSb,Tbb4sb,UMu52b,UUJqVe,Uas9Hd,WpP9Yc,YHI3We,YTxL4,YYmHzb,YgOFye,ZSzced,_b,_tp,aXwZ4c,bTi8wc,byfTOb,cYShmd,cciGGe,eWuMIe,f8Gu1e,gJzDyc,hc6Ubd,inNHtf,lkFgGf,lsjVmc,lwddkf,m9oV,mvkUhe,n73qwf,oLggrd,oqkvIf,pxq3x,qPYxq,qmdT9,rmumx,siKnQd,soHxf,t2srLd,tUnxGc,vHEMJe,vfuNJf,vjKJJ,ws9Tlc,xQtZb,xiZRqc,y5vRwf,yRXbo,ywOR5c,z0u0L,zbML3c,zr1jrb,zy0vNb/excm=_b,_tp,identifierview/ed=1/wt=2/ujg=1/rs=AOaEmlFNTD66ThTqDudpZN1hB4_eXeW0DQ/ee=ASJRFf:DAnQ7e;Al0B8:kibjWe;DaIJ8c:iAskyc;EVNhjf:pw70Gc;EkYFhd:GwYlN;EmZ2Bf:zr1jrb;JsbNhc:Xd8iUd;K5nYTd:ZDZcre;LBgRLc:XVMNvd;Me32dd:MEeYgc;NJ1rfe:yGfSdd;NPKaK:PVlQOd;NSEoX:lazG7b;Pjplud:EEDORb;QGR0gd:Mlhmy;Qi0VDf:vUyhef;SMDL4c:K0PMbc;SNUn3:ZwDk9d;ScI3Yc:e7Hzgb;UpnZUd:nnwwYc;Uvc8o:VDovNc;UyjXyd:qXkWrc;VlRiDf:j7ZRif;XdiAjb:NLiXbe;YIZmRd:A1yn5d;a56pNe:JEfCwb;cEt90b:ws9Tlc;dIoSBb:SpsfSb;dowIGb:ebZ3mb;eBAeSb:zbML3c;iFQyKf:vfuNJf;lGvXed:Gtn19d;lOO0Vd:OTA3Ae;nTuGK:JKNPM;oGtAuc:sOXFj;oSUNyd:K0PMbc;oXZmbc:tUnxGc;pXdRYb:L9OGUe;qQEoOc:KUM7Z;qafBPd:yDVVkb;qddgKe:xQtZb;sHdTOe:nSePib;twueg:ouk7y;vNjB7d:YTxL4;wR5FRb:siKnQd;wc73nd:kqeOEd;yxTchf:KUM7Z/dti=1/m=p3hmRc,LvGhrf,RqjULd": "assets/190d46dedfb7c966_m_p3hmRc_LvGhrf_RqjULd.js", "https://www.gstatic.com/_/mss/boq-identity/_/js/k=boq-identity.AccountsSignInUi.en_US.6ScBlw9gOxw.es5.O/ck=boq-identity.AccountsSignInUi.8acDTw4n5J4.L.B1.O/am=EQ0AAAAwULyQAcD-_28AAAIIsh3wPQugCRAyAAAAAAAAAABgAQAAGgE/d=1/exm=CMcBD,DqMihc,E87wgc,EFQ78c,EN3i8d,Fndnac,GwYlN,IZT63,K0PMbc,K1ZKnb,KUM7Z,L9OGUe,LDQI,LEikZe,LvGhrf,MY7mZe,MpJwZc,NLiXbe,PHUIyb,PrPYRd,RqjULd,SCuOPb,SD8Jgb,SpsfSb,Tbb4sb,UMu52b,UUJqVe,Uas9Hd,WpP9Yc,YHI3We,YTxL4,YYmHzb,YgOFye,ZSzced,_b,_tp,aXwZ4c,bTi8wc,byfTOb,cYShmd,cciGGe,eWuMIe,f8Gu1e,gJzDyc,hc6Ubd,inNHtf,lkFgGf,lsjVmc,lwddkf,m9oV,mvkUhe,n73qwf,oLggrd,oqkvIf,p3hmRc,pxq3x,qPYxq,qmdT9,rmumx,siKnQd,soHxf,t2srLd,tUnxGc,vHEMJe,vfuNJf,vjKJJ,ws9Tlc,xQtZb,xiZRqc,y5vRwf,yRXbo,ywOR5c,z0u0L,zbML3c,zr1jrb,zy0vNb/excm=_b,_tp,identifierview/ed=1/wt=2/ujg=1/rs=AOaEmlFNTD66ThTqDudpZN1hB4_eXeW0DQ/ee=ASJRFf:DAnQ7e;Al0B8:kibjWe;DaIJ8c:iAskyc;EVNhjf:pw70Gc;EkYFhd:GwYlN;EmZ2Bf:zr1jrb;JsbNhc:Xd8iUd;K5nYTd:ZDZcre;LBgRLc:XVMNvd;Me32dd:MEeYgc;NJ1rfe:yGfSdd;NPKaK:PVlQOd;NSEoX:lazG7b;Pjplud:EEDORb;QGR0gd:Mlhmy;Qi0VDf:vUyhef;SMDL4c:K0PMbc;SNUn3:ZwDk9d;ScI3Yc:e7Hzgb;UpnZUd:nnwwYc;Uvc8o:VDovNc;UyjXyd:qXkWrc;VlRiDf:j7ZRif;XdiAjb:NLiXbe;YIZmRd:A1yn5d;a56pNe:JEfCwb;cEt90b:ws9Tlc;dIoSBb:SpsfSb;dowIGb:ebZ3mb;eBAeSb:zbML3c;iFQyKf:vfuNJf;lGvXed:Gtn19d;lOO0Vd:OTA3Ae;nTuGK:JKNPM;oGtAuc:sOXFj;oSUNyd:K0PMbc;oXZmbc:tUnxGc;pXdRYb:L9OGUe;qQEoOc:KUM7Z;qafBPd:yDVVkb;qddgKe:xQtZb;sHdTOe:nSePib;twueg:ouk7y;vNjB7d:YTxL4;wR5FRb:siKnQd;wc73nd:kqeOEd;yxTchf:KUM7Z/dti=1/m=ZwDk9d,RMhBfe": "assets/aabdcb53dd36a0fd_m_ZwDk9d_RMhBfe.js", "https://www.gstatic.com/_/mss/boq-identity/_/js/k=boq-identity.AccountsSignInUi.en_US.6ScBlw9gOxw.es5.O/ck=boq-identity.AccountsSignInUi.8acDTw4n5J4.L.B1.O/am=EQ0AAAAwULyQAcD-_28AAAIIsh3wPQugCRAyAAAAAAAAAABgAQAAGgE/d=1/exm=CMcBD,DqMihc,E87wgc,EFQ78c,EN3i8d,Fndnac,GwYlN,IZT63,K0PMbc,K1ZKnb,KUM7Z,L9OGUe,LDQI,LEikZe,LvGhrf,MY7mZe,MpJwZc,NLiXbe,PHUIyb,PrPYRd,RMhBfe,RqjULd,SCuOPb,SD8Jgb,SpsfSb,Tbb4sb,UMu52b,UUJqVe,Uas9Hd,WpP9Yc,YHI3We,YTxL4,YYmHzb,YgOFye,ZSzced,ZwDk9d,_b,_tp,aXwZ4c,bTi8wc,byfTOb,cYShmd,cciGGe,eWuMIe,f8Gu1e,gJzDyc,hc6Ubd,inNHtf,lkFgGf,lsjVmc,lwddkf,m9oV,mvkUhe,n73qwf,oLggrd,oqkvIf,p3hmRc,pxq3x,qPYxq,qmdT9,rmumx,siKnQd,soHxf,t2srLd,tUnxGc,vHEMJe,vfuNJf,vjKJJ,ws9Tlc,xQtZb,xiZRqc,y5vRwf,yRXbo,ywOR5c,z0u0L,zbML3c,zr1jrb,zy0vNb/excm=_b,_tp,identifierview/ed=1/wt=2/ujg=1/rs=AOaEmlFNTD66ThTqDudpZN1hB4_eXeW0DQ/ee=ASJRFf:DAnQ7e;Al0B8:kibjWe;DaIJ8c:iAskyc;EVNhjf:pw70Gc;EkYFhd:GwYlN;EmZ2Bf:zr1jrb;JsbNhc:Xd8iUd;K5nYTd:ZDZcre;LBgRLc:XVMNvd;Me32dd:MEeYgc;NJ1rfe:yGfSdd;NPKaK:PVlQOd;NSEoX:lazG7b;Pjplud:EEDORb;QGR0gd:Mlhmy;Qi0VDf:vUyhef;SMDL4c:K0PMbc;SNUn3:ZwDk9d;ScI3Yc:e7Hzgb;UpnZUd:nnwwYc;Uvc8o:VDovNc;UyjXyd:qXkWrc;VlRiDf:j7ZRif;XdiAjb:NLiXbe;YIZmRd:A1yn5d;a56pNe:JEfCwb;cEt90b:ws9Tlc;dIoSBb:SpsfSb;dowIGb:ebZ3mb;eBAeSb:zbML3c;iFQyKf:vfuNJf;lGvXed:Gtn19d;lOO0Vd:OTA3Ae;nTuGK:JKNPM;oGtAuc:sOXFj;oSUNyd:K0PMbc;oXZmbc:tUnxGc;pXdRYb:L9OGUe;qQEoOc:KUM7Z;qafBPd:yDVVkb;qddgKe:xQtZb;sHdTOe:nSePib;twueg:ouk7y;vNjB7d:YTxL4;wR5FRb:siKnQd;wc73nd:kqeOEd;yxTchf:KUM7Z/dti=1/m=ZDZcre,w9hDv,A7fCU": "assets/961983783e989187_m_ZDZcre_w9hDv_A7fCU.js", "https://www.gstatic.com/_/mss/boq-identity/_/js/k=boq-identity.AccountsSignInUi.en_US.6ScBlw9gOxw.es5.O/ck=boq-identity.AccountsSignInUi.8acDTw4n5J4.L.B1.O/am=EQ0AAAAwULyQAcD-_28AAAIIsh3wPQugCRAyAAAAAAAAAABgAQAAGgE/d=1/exm=A7fCU,CMcBD,DqMihc,E87wgc,EFQ78c,EN3i8d,Fndnac,GwYlN,IZT63,K0PMbc,K1ZKnb,KUM7Z,L9OGUe,LDQI,LEikZe,LvGhrf,MY7mZe,MpJwZc,NLiXbe,PHUIyb,PrPYRd,RMhBfe,RqjULd,SCuOPb,SD8Jgb,SpsfSb,Tbb4sb,UMu52b,UUJqVe,Uas9Hd,WpP9Yc,YHI3We,YTxL4,YYmHzb,YgOFye,ZDZcre,ZSzced,ZwDk9d,_b,_tp,aXwZ4c,bTi8wc,byfTOb,cYShmd,cciGGe,eWuMIe,f8Gu1e,gJzDyc,hc6Ubd,inNHtf,lkFgGf,lsjVmc,lwddkf,m9oV,mvkUhe,n73qwf,oLggrd,oqkvIf,p3hmRc,pxq3x,qPYxq,qmdT9,rmumx,siKnQd,soHxf,t2srLd,tUnxGc,vHEMJe,vfuNJf,vjKJJ,w9hDv,ws9Tlc,xQtZb,xiZRqc,y5vRwf,yRXbo,ywOR5c,z0u0L,zbML3c,zr1jrb,zy0vNb/excm=_b,_tp,identifierview/ed=1/wt=2/ujg=1/rs=AOaEmlFNTD66ThTqDudpZN1hB4_eXeW0DQ/ee=ASJRFf:DAnQ7e;Al0B8:kibjWe;DaIJ8c:iAskyc;EVNhjf:pw70Gc;EkYFhd:GwYlN;EmZ2Bf:zr1jrb;JsbNhc:Xd8iUd;K5nYTd:ZDZcre;LBgRLc:XVMNvd;Me32dd:MEeYgc;NJ1rfe:yGfSdd;NPKaK:PVlQOd;NSEoX:lazG7b;Pjplud:EEDORb;QGR0gd:Mlhmy;Qi0VDf:vUyhef;SMDL4c:K0PMbc;SNUn3:ZwDk9d;ScI3Yc:e7Hzgb;UpnZUd:nnwwYc;Uvc8o:VDovNc;UyjXyd:qXkWrc;VlRiDf:j7ZRif;XdiAjb:NLiXbe;YIZmRd:A1yn5d;a56pNe:JEfCwb;cEt90b:ws9Tlc;dIoSBb:SpsfSb;dowIGb:ebZ3mb;eBAeSb:zbML3c;iFQyKf:vfuNJf;lGvXed:Gtn19d;lOO0Vd:OTA3Ae;nTuGK:JKNPM;oGtAuc:sOXFj;oSUNyd:K0PMbc;oXZmbc:tUnxGc;pXdRYb:L9OGUe;qQEoOc:KUM7Z;qafBPd:yDVVkb;qddgKe:xQtZb;sHdTOe:nSePib;twueg:ouk7y;vNjB7d:YTxL4;wR5FRb:siKnQd;wc73nd:kqeOEd;yxTchf:KUM7Z/dti=1/m=iAskyc,ziXSP": "assets/7dc1e5838cc6e06f_m_iAskyc_ziXSP.js", "https://www.gstatic.com/_/mss/boq-identity/_/js/k=boq-identity.AccountsSignInUi.en_US.6ScBlw9gOxw.es5.O/ck=boq-identity.AccountsSignInUi.8acDTw4n5J4.L.B1.O/am=EQ0AAAAwULyQAcD-_28AAAIIsh3wPQugCRAyAAAAAAAAAABgAQAAGgE/d=1/exm=A7fCU,CMcBD,DqMihc,E87wgc,EFQ78c,EN3i8d,Fndnac,GwYlN,IZT63,K0PMbc,K1ZKnb,KUM7Z,L9OGUe,LDQI,LEikZe,LvGhrf,MY7mZe,MpJwZc,NLiXbe,PHUIyb,PrPYRd,RMhBfe,RqjULd,SCuOPb,SD8Jgb,SpsfSb,Tbb4sb,UMu52b,UUJqVe,Uas9Hd,WpP9Yc,YHI3We,YTxL4,YYmHzb,YgOFye,ZDZcre,ZSzced,ZwDk9d,_b,_tp,aXwZ4c,bTi8wc,byfTOb,cYShmd,cciGGe,eWuMIe,f8Gu1e,gJzDyc,hc6Ubd,iAskyc,inNHtf,lkFgGf,lsjVmc,lwddkf,m9oV,mvkUhe,n73qwf,oLggrd,oqkvIf,p3hmRc,pxq3x,qPYxq,qmdT9,rmumx,siKnQd,soHxf,t2srLd,tUnxGc,vHEMJe,vfuNJf,vjKJJ,w9hDv,ws9Tlc,xQtZb,xiZRqc,y5vRwf,yRXbo,ywOR5c,z0u0L,zbML3c,ziXSP,zr1jrb,zy0vNb/excm=_b,_tp,identifierview/ed=1/wt=2/ujg=1/rs=AOaEmlFNTD66ThTqDudpZN1hB4_eXeW0DQ/ee=ASJRFf:DAnQ7e;Al0B8:kibjWe;DaIJ8c:iAskyc;EVNhjf:pw70Gc;EkYFhd:GwYlN;EmZ2Bf:zr1jrb;JsbNhc:Xd8iUd;K5nYTd:ZDZcre;LBgRLc:XVMNvd;Me32dd:MEeYgc;NJ1rfe:yGfSdd;NPKaK:PVlQOd;NSEoX:lazG7b;Pjplud:EEDORb;QGR0gd:Mlhmy;Qi0VDf:vUyhef;SMDL4c:K0PMbc;SNUn3:ZwDk9d;ScI3Yc:e7Hzgb;UpnZUd:nnwwYc;Uvc8o:VDovNc;UyjXyd:qXkWrc;VlRiDf:j7ZRif;XdiAjb:NLiXbe;YIZmRd:A1yn5d;a56pNe:JEfCwb;cEt90b:ws9Tlc;dIoSBb:SpsfSb;dowIGb:ebZ3mb;eBAeSb:zbML3c;iFQyKf:vfuNJf;lGvXed:Gtn19d;lOO0Vd:OTA3Ae;nTuGK:JKNPM;oGtAuc:sOXFj;oSUNyd:K0PMbc;oXZmbc:tUnxGc;pXdRYb:L9OGUe;qQEoOc:KUM7Z;qafBPd:yDVVkb;qddgKe:xQtZb;sHdTOe:nSePib;twueg:ouk7y;vNjB7d:YTxL4;wR5FRb:siKnQd;wc73nd:kqeOEd;yxTchf:KUM7Z/dti=1/m=P6sQOc": "assets/6f8bd2093d668e69_m_P6sQOc.js", "https://accounts.google.com/_/bscframe": "assets/c77e5168dffda66b_bscframe.html", "https://accounts.google.com/v3/signin/_/AccountsSignInUi/data/batchexecute?rpcids=UEkKwb&source-path=%2Fv3%2Fsignin%2Fidentifier&f.sid=3947811558194865530&bl=boq_identityfrontendauthuiserver_20260616.03_p0&hl=en-US&dsh=S-1306621151%3A1781963928160062&_reqid=35929&rt=c": "assets/5c68c9c8835aca3b_batchexecute.json", "https://accounts.youtube.com/accounts/CheckConnection?pmpo=https%3A%2F%2Faccounts.google.com&v=-1835445263&timestamp=1781963928701": "assets/56224ed4f9eac1cb_CheckConnection.html", "https://www.gstatic.com/_/mss/boq-identity/_/js/k=boq-identity.AccountsSignInUi.en_US.6ScBlw9gOxw.es5.O/ck=boq-identity.AccountsSignInUi.8acDTw4n5J4.L.B1.O/am=EQ0AAAAwULyQAcD-_28AAAIIsh3wPQugCRAyAAAAAAAAAABgAQAAGgE/d=1/exm=A7fCU,CMcBD,DqMihc,E87wgc,EFQ78c,EN3i8d,Fndnac,GwYlN,IZT63,K0PMbc,K1ZKnb,KUM7Z,L9OGUe,LDQI,LEikZe,LvGhrf,MY7mZe,MpJwZc,NLiXbe,P6sQOc,PHUIyb,PrPYRd,RMhBfe,RqjULd,SCuOPb,SD8Jgb,SpsfSb,Tbb4sb,UMu52b,UUJqVe,Uas9Hd,WpP9Yc,YHI3We,YTxL4,YYmHzb,YgOFye,ZDZcre,ZSzced,ZwDk9d,_b,_tp,aXwZ4c,bTi8wc,byfTOb,cYShmd,cciGGe,eWuMIe,f8Gu1e,gJzDyc,hc6Ubd,iAskyc,inNHtf,lkFgGf,lsjVmc,lwddkf,m9oV,mvkUhe,n73qwf,oLggrd,oqkvIf,p3hmRc,pxq3x,qPYxq,qmdT9,rmumx,siKnQd,soHxf,t2srLd,tUnxGc,vHEMJe,vfuNJf,vjKJJ,w9hDv,ws9Tlc,xQtZb,xiZRqc,y5vRwf,yRXbo,ywOR5c,z0u0L,zbML3c,ziXSP,zr1jrb,zy0vNb/excm=_b,_tp,identifierview/ed=1/wt=2/ujg=1/rs=AOaEmlFNTD66ThTqDudpZN1hB4_eXeW0DQ/ee=ASJRFf:DAnQ7e;Al0B8:kibjWe;DaIJ8c:iAskyc;EVNhjf:pw70Gc;EkYFhd:GwYlN;EmZ2Bf:zr1jrb;JsbNhc:Xd8iUd;K5nYTd:ZDZcre;LBgRLc:XVMNvd;Me32dd:MEeYgc;NJ1rfe:yGfSdd;NPKaK:PVlQOd;NSEoX:lazG7b;Pjplud:EEDORb;QGR0gd:Mlhmy;Qi0VDf:vUyhef;SMDL4c:K0PMbc;SNUn3:ZwDk9d;ScI3Yc:e7Hzgb;UpnZUd:nnwwYc;Uvc8o:VDovNc;UyjXyd:qXkWrc;VlRiDf:j7ZRif;XdiAjb:NLiXbe;YIZmRd:A1yn5d;a56pNe:JEfCwb;cEt90b:ws9Tlc;dIoSBb:SpsfSb;dowIGb:ebZ3mb;eBAeSb:zbML3c;iFQyKf:vfuNJf;lGvXed:Gtn19d;lOO0Vd:OTA3Ae;nTuGK:JKNPM;oGtAuc:sOXFj;oSUNyd:K0PMbc;oXZmbc:tUnxGc;pXdRYb:L9OGUe;qQEoOc:KUM7Z;qafBPd:yDVVkb;qddgKe:xQtZb;sHdTOe:nSePib;twueg:ouk7y;vNjB7d:YTxL4;wR5FRb:siKnQd;wc73nd:kqeOEd;yxTchf:KUM7Z/dti=1/m=wg1P6b": "assets/dba55cab4817bf16_m_wg1P6b.js", "https://play.google.com/log?hasfast=true&authuser=0&format=json": "assets/502e9680cfa78fa8_log", "https://www.gstatic.com/_/mss/boq-identity/_/js/k=boq-identity.AccountsSignInUi.en_US.6ScBlw9gOxw.es5.O/ck=boq-identity.AccountsSignInUi.8acDTw4n5J4.L.B1.O/am=EQ0AAAAwULyQAcD-_28AAAIIsh3wPQugCRAyAAAAAAAAAABgAQAAGgE/d=1/exm=A7fCU,CMcBD,DqMihc,E87wgc,EFQ78c,EN3i8d,Fndnac,GwYlN,IZT63,K0PMbc,K1ZKnb,KUM7Z,L9OGUe,LDQI,LEikZe,LvGhrf,MY7mZe,MpJwZc,NLiXbe,P6sQOc,PHUIyb,PrPYRd,RMhBfe,RqjULd,SCuOPb,SD8Jgb,SpsfSb,Tbb4sb,UMu52b,UUJqVe,Uas9Hd,WpP9Yc,YHI3We,YTxL4,YYmHzb,YgOFye,ZDZcre,ZSzced,ZwDk9d,_b,_tp,aXwZ4c,bTi8wc,byfTOb,cYShmd,cciGGe,eWuMIe,f8Gu1e,gJzDyc,hc6Ubd,iAskyc,inNHtf,lkFgGf,lsjVmc,lwddkf,m9oV,mvkUhe,n73qwf,oLggrd,oqkvIf,p3hmRc,pxq3x,qPYxq,qmdT9,rmumx,siKnQd,soHxf,t2srLd,tUnxGc,vHEMJe,vfuNJf,vjKJJ,w9hDv,wg1P6b,ws9Tlc,xQtZb,xiZRqc,y5vRwf,yRXbo,ywOR5c,z0u0L,zbML3c,ziXSP,zr1jrb,zy0vNb/excm=_b,_tp,identifierview/ed=1/wt=2/ujg=1/rs=AOaEmlFNTD66ThTqDudpZN1hB4_eXeW0DQ/ee=ASJRFf:DAnQ7e;Al0B8:kibjWe;DaIJ8c:iAskyc;EVNhjf:pw70Gc;EkYFhd:GwYlN;EmZ2Bf:zr1jrb;JsbNhc:Xd8iUd;K5nYTd:ZDZcre;LBgRLc:XVMNvd;Me32dd:MEeYgc;NJ1rfe:yGfSdd;NPKaK:PVlQOd;NSEoX:lazG7b;Pjplud:EEDORb;QGR0gd:Mlhmy;Qi0VDf:vUyhef;SMDL4c:K0PMbc;SNUn3:ZwDk9d;ScI3Yc:e7Hzgb;UpnZUd:nnwwYc;Uvc8o:VDovNc;UyjXyd:qXkWrc;VlRiDf:j7ZRif;XdiAjb:NLiXbe;YIZmRd:A1yn5d;a56pNe:JEfCwb;cEt90b:ws9Tlc;dIoSBb:SpsfSb;dowIGb:ebZ3mb;eBAeSb:zbML3c;iFQyKf:vfuNJf;lGvXed:Gtn19d;lOO0Vd:OTA3Ae;nTuGK:JKNPM;oGtAuc:sOXFj;oSUNyd:K0PMbc;oXZmbc:tUnxGc;pXdRYb:L9OGUe;qQEoOc:KUM7Z;qafBPd:yDVVkb;qddgKe:xQtZb;sHdTOe:nSePib;twueg:ouk7y;vNjB7d:YTxL4;wR5FRb:siKnQd;wc73nd:kqeOEd;yxTchf:KUM7Z/dti=1/m=Wt6vjf,hhhU8,FCpbqb,WhJNk": "assets/18b9d87846cd25a4_m_Wt6vjf_hhhU8_FCpbqb_WhJNk.js", "https://accounts.google.com/v3/signin/_/AccountsSignInUi/browserinfo?f.sid=3947811558194865530&bl=boq_identityfrontendauthuiserver_20260616.03_p0&hl=en-US&dsh=S-1306621151%3A1781963928160062&_reqid=135929&rt=j": "assets/d46eaaeb4452c5d5_browserinfo.json", "https://play.google.com/log?format=json&hasfast=true&authuser=0": "assets/502e9680cfa78fa8_log"};
+// Pre-populate path+query keys: when opened via file://, JS
+// resolves '/foo.js' against file://… so we lose the original
+// origin. Indexing by pathname+search lets the lookup succeed.
+var _add = {};
+for (var _k in ASSET_MAP) {
+  try { var _u = new URL(_k); _add[_u.pathname + _u.search] = ASSET_MAP[_k]; }
+  catch(e){}
+}
+for (var _k in _add) if (!ASSET_MAP[_k]) ASSET_MAP[_k] = _add[_k];
+function resolveLocal(u){
+  if (!u || typeof u !== 'string') return null;
+  if (u.indexOf('data:') === 0 || u.indexOf('blob:') === 0) return null;
+  if (ASSET_MAP[u]) return ASSET_MAP[u];
+  try {
+    var url = new URL(u, location.href);
+    var pq = url.pathname + url.search;
+    if (ASSET_MAP[pq]) return ASSET_MAP[pq];
+    // The snapshot may be opened from a subdirectory, while
+    // ASSET_MAP paths are origin-rooted. Retry with the
+    // document's own directory prefix stripped off.
+    var dir = location.pathname.replace(/[^/]*$/, '');
+    if (dir.length > 1 && pq.indexOf(dir) === 0) {
+      var rel = pq.slice(dir.length - 1);
+      if (ASSET_MAP[rel]) return ASSET_MAP[rel];
+    }
+    // Next.js image optimization wrapper — peel the inner CDN URL
+    if (/_next\/image$/.test(url.pathname)) {
+      var t = url.searchParams.get('url');
+      if (t) {
+        var dec = decodeURIComponent(t);
+        if (ASSET_MAP[dec]) return ASSET_MAP[dec];
+        var bare = dec.split('?')[0];
+        for (var k in ASSET_MAP) {
+          if (k.split('?')[0] === bare) return ASSET_MAP[k];
+        }
+      }
+    }
+  } catch(e){}
+  return null;
+}
+function rewriteSrcset(s){
+  if (!s || typeof s !== 'string') return s;
+  return s.split(',').map(function(it){
+    var p = it.trim().split(/\s+/);
+    var loc = resolveLocal(p[0]);
+    if (loc) p[0] = loc;
+    return p.join(' ');
+  }).join(', ');
+}
+// Patch property setters: el.src = '...' / el.href = '...'
+// IMPORTANT: skip rewrite when the element has crossOrigin set.
+// WebGL textures (UnicornStudio, Three.js, etc.) are loaded via
+//   img.crossOrigin = 'anonymous'; img.src = 'https://cdn/...'
+// and consumed via gl.texImage2D. file:// resources have no CORS
+// headers, so rewriting to local makes WebGL reject the texture
+// (Access blocked by CORS policy → black/missing 3D scene).
+// Better to keep the original URL: works online, fails offline,
+// matches non-patched behaviour.
+function patchSetter(klass, prop, transform){
+  if (!klass || !klass.prototype) return;
+  var desc = Object.getOwnPropertyDescriptor(klass.prototype, prop);
+  if (!desc || !desc.set) return;
+  Object.defineProperty(klass.prototype, prop, {
+    configurable: true,
+    get: desc.get,
+    set: function(v){
+      try {
+        if (transform === 'srcset') {
+          v = rewriteSrcset(v);
+        } else {
+          // Captured runtime resource (UnicornStudio texture,
+          // etc.) → serve as a data: URI. data: never CORS-
+          // taints a WebGL canvas, unlike a file:// texture,
+          // so gl.texImage2D still accepts it offline.
+          var du = window.__offlineDataUri && window.__offlineDataUri(v);
+          if (du) { v = du; }
+          else if (!this.crossOrigin) {
+            var loc = resolveLocal(v); if (loc) v = loc;
+          }
+        }
+      } catch(e){}
+      desc.set.call(this, v);
+    }
+  });
+}
+patchSetter(window.HTMLScriptElement, 'src');
+patchSetter(window.HTMLLinkElement, 'href');
+patchSetter(window.HTMLImageElement, 'src');
+patchSetter(window.HTMLImageElement, 'srcset', 'srcset');
+patchSetter(window.HTMLSourceElement, 'src');
+patchSetter(window.HTMLSourceElement, 'srcset', 'srcset');
+patchSetter(window.HTMLMediaElement, 'src');
+patchSetter(window.HTMLIFrameElement, 'src');
+// Patch setAttribute too — some libs use it instead of property set
+var _setAttr = Element.prototype.setAttribute;
+Element.prototype.setAttribute = function(name, value){
+  try {
+    if (typeof value === 'string') {
+      if (name === 'src' || name === 'href') {
+        var du = window.__offlineDataUri && window.__offlineDataUri(value);
+        if (du) { value = du; }
+        else if (!this.crossOrigin) {
+          var loc = resolveLocal(value); if (loc) value = loc;
+        }
+      } else if (name === 'srcset' && !this.crossOrigin) {
+        value = rewriteSrcset(value);
+      }
+    }
+  } catch(e){}
+  return _setAttr.call(this, name, value);
+};
+// Expose for the late-init script in body
+window.__resolveLocal = resolveLocal;
+window.__rewriteSrcset = rewriteSrcset;
+})();</script><style data-offline="1">/* offline: ensure content is visible regardless of JS init state */
+html,body{opacity:1!important;visibility:visible!important}
+.page-loader,.site-loader,[class*='loading-screen'],[id*='loading-screen']{display:none!important}
+/* GSAP ScrollTrigger pin-spacer (CSR mode only): without
+   GSAP running, the spacer leaves a black gap of reserved
+   scroll. Collapse it to its content's natural height. */
+.pin-spacer{height:auto!important;min-height:0!important;
+  padding:0!important;max-height:none!important}
+.pin-spacer>*{position:relative!important;
+  inset:auto!important;top:auto!important;left:auto!important}
+</style></head><body><script data-offline-fix="1">(function(){
+var IS_CSR = true;
+var resolveLocal = window.__resolveLocal || function(){return null;};
+var rewriteSrcset = window.__rewriteSrcset || function(s){return s;};
+function fixImg(el){
+  if (!el || el.tagName !== 'IMG') return;
+  var src = el.getAttribute('src');
+  var loc = resolveLocal(src);
+  if (loc && src !== loc) el.setAttribute('src', loc);
+  var ss = el.getAttribute('srcset');
+  if (ss) {
+    var nss = rewriteSrcset(ss);
+    if (nss !== ss) el.setAttribute('srcset', nss);
+  }
+}
+function fixAll(){ document.querySelectorAll('img').forEach(fixImg); }
+function hasSlideOffset(t){
+  // True if a transform indicates a 'parked off-screen' starting
+  // state: translation in px (>= 30) or % (>= 5), or a matrix
+  // with non-zero translation. Returns false for crossfade-only
+  // companions like scale(0.9) or pure centering translateX(-50%).
+  if (!t || t === 'none') return false;
+  // matrix(a,b,c,d,tx,ty) — parse tx/ty; matrix3d & friends → assume slide.
+  var matMatch = t.match(/matrix\(([^)]+)\)/);
+  if (matMatch) {
+    var parts = matMatch[1].split(',').map(function(x){return parseFloat(x.trim());});
+    if (parts.length === 6) {
+      if (Math.abs(parts[4]) >= 30 || Math.abs(parts[5]) >= 30) return true;
+    } else { return true; }
+  }
+  if (/matrix3d/i.test(t)) return true;
+  var px = t.match(/(-?\d+\.?\d*)px/g) || [];
+  for (var i = 0; i < px.length; i++) {
+    if (Math.abs(parseFloat(px[i])) >= 30) return true;
+  }
+  var pct = t.match(/(-?\d+\.?\d*)%/g) || [];
+  for (var j = 0; j < pct.length; j++) {
+    if (Math.abs(parseFloat(pct[j])) >= 5) return true;
+  }
+  return false;
+}
+function isHiddenStart(s){
+  // True if the element's inline style is parked at a 'before'
+  // animation state. opacity:0 alone is ambiguous (could be a
+  // crossfade companion); pair it with a slide transform OR an
+  // explicit visibility:hidden (GSAP/SplitType signature) to be
+  // confident it's a scroll-reveal waiting to fire.
+  if (s.opacity !== '0' && s.visibility !== 'hidden') return false;
+  if (s.visibility === 'hidden') return true;
+  return hasSlideOffset(s.transform) || hasSlideOffset(s.translate);
+}
+function revealEl(el){
+  var s = el.style;
+  s.opacity = '1';
+  if (s.visibility === 'hidden') s.visibility = 'visible';
+  if (s.transform) s.transform = 'none';
+  if (s.translate) s.translate = 'none';
+  if (s.rotate)    s.rotate = 'none';
+  if (s.scale)     s.scale = 'none';
+  if (s.pointerEvents === 'none') s.pointerEvents = '';
+}
+function snapReveal(){
+  // Safety net: any 'before-state' element still hidden gets
+  // forced visible. Used as a deadline pass for non-CSR mode
+  // (after GSAP/etc had a chance to play) and as a final guard.
+  // Skip pinned-chain elements — same reason as findScrollAnchor.
+  var n = 0;
+  document.querySelectorAll('[style]').forEach(function(el){
+    if (!isHiddenStart(el.style)) return;
+    if (isInsideFixed(el)) return;
+    revealEl(el); n++;
+  });
+  if (window.console && n) console.log('[offline-fix] snap-revealed', n);
+}
+function isInsideFixed(el){
+  var p = el;
+  while (p && p !== document.documentElement) {
+    if (getComputedStyle(p).position === 'fixed') return true;
+    p = p.parentElement;
+  }
+  return false;
+}
+function findScrollAnchor(el){
+  // Pinned-narrative sections (one position:fixed ancestor wrapping
+  // many sequenced headings the live JS reveals one-by-one across
+  // scroll progress) can't be orchestrated offline — revealing all
+  // of them at once produces an overlapping mess. Skip them: leave
+  // the parked state intact, matching the live site at scroll=0.
+  // For sticky chains, observe the sticky container itself (fires
+  // when the user has scrolled past its stuck threshold).
+  if (isInsideFixed(el)) return null;
+  var p = el;
+  while (p && p !== document.documentElement) {
+    if (getComputedStyle(p).position === 'sticky') return p;
+    p = p.parentElement;
+  }
+  return el;
+}
+function progressiveReveal(){
+  // CSR mode: scripts stripped → no GSAP/IO is going to fire.
+  // Mimic a scroll-driven reveal: each parked element gets a
+  // CSS transition + IntersectionObserver. As it enters viewport
+  // we transition to the 'after' state, with a small stagger by
+  // document order so SplitType chars still feel letter-by-letter.
+  var targets = [];
+  document.querySelectorAll('[style]').forEach(function(el){
+    if (isHiddenStart(el.style)) targets.push(el);
+  });
+  if (!targets.length) return;
+  var EASE = 'cubic-bezier(.16,1,.3,1)';
+  targets.forEach(function(el){
+    el.style.transition =
+      'opacity .6s ' + EASE + ', transform .6s ' + EASE + ', ' +
+      'translate .6s ' + EASE + ', scale .6s ' + EASE + ', ' +
+      'visibility 0s linear';
+  });
+  if (typeof IntersectionObserver === 'undefined') {
+    targets.forEach(revealEl);
+    return;
+  }
+  // Group targets by their scroll anchor. Anchors in sticky
+  // sections share one observation point — when that anchor
+  // intersects, we reveal all its parked descendants.
+  // Targets with null anchor (inside position:fixed) are skipped.
+  var groups = new Map();
+  targets.forEach(function(el){
+    var anchor = findScrollAnchor(el);
+    if (!anchor) return;
+    if (!groups.has(anchor)) groups.set(anchor, []);
+    groups.get(anchor).push(el);
+  });
+  var io = new IntersectionObserver(function(entries){
+    entries.forEach(function(entry){
+      if (!entry.isIntersecting) return;
+      var children = groups.get(entry.target) || [entry.target];
+      children.sort(function(a, b){
+        var pos = a.compareDocumentPosition(b);
+        return (pos & Node.DOCUMENT_POSITION_FOLLOWING) ? -1 : 1;
+      });
+      children.forEach(function(child, i){
+        var delay = Math.min(i * 18, 700);
+        setTimeout(function(){ revealEl(child); }, delay);
+      });
+      io.unobserve(entry.target);
+    });
+  }, { threshold: 0.05, rootMargin: '0px 0px -8% 0px' });
+  groups.forEach(function(_, anchor){ io.observe(anchor); });
+  // Deadline guard: anything that never intersects still gets revealed.
+  setTimeout(snapReveal, 8000);
+}
+function initUnicornStudio(){
+  // Captured page already has the loaded UMD script + the inline
+  // loader that says `if(!window.UnicornStudio)…`. The loader bails
+  // because UnicornStudio is already defined, so init() never runs.
+  if (window.UnicornStudio && typeof window.UnicornStudio.init === 'function'
+      && !window.UnicornStudio.isInitialized) {
+    try { window.UnicornStudio.init(); window.UnicornStudio.isInitialized = true; }
+    catch(e){ if(window.console) console.warn('[offline-fix] UnicornStudio init failed:', e); }
+  }
+}
+// Initial img sweep + observer for hydration-time updates
+fixAll();
+var obs = new MutationObserver(function(muts){
+  for (var i = 0; i < muts.length; i++) {
+    var m = muts[i];
+    if (m.type === 'attributes' && m.target.tagName === 'IMG') fixImg(m.target);
+    for (var j = 0; j < m.addedNodes.length; j++) {
+      var n = m.addedNodes[j];
+      if (n && n.nodeType === 1) {
+        if (n.tagName === 'IMG') fixImg(n);
+        if (n.querySelectorAll) n.querySelectorAll('img').forEach(fixImg);
+      }
+    }
+  }
+});
+obs.observe(document, {childList:true, subtree:true,
+  attributes:true, attributeFilter:['src','srcset']});
+setTimeout(fixAll, 1000);
+setTimeout(fixAll, 3000);
+var go = function(){
+  // CSR: scripts stripped, so 'before-state' elements stay parked
+  // forever unless we do something. Use IntersectionObserver to
+  // reveal them progressively as the user scrolls — preserves the
+  // scroll-triggered animation feel for SplitType chars, etc.
+  // Non-CSR: GSAP/Framer may still play; let them, then catch any
+  // leftovers with a snap pass at 5 s.
+  if (IS_CSR) progressiveReveal();
+  else setTimeout(snapReveal, 5000);
+  initUnicornStudio();
+  setTimeout(initUnicornStudio, 500);
+  setTimeout(initUnicornStudio, 2000);
+};
+if (document.readyState === 'complete') go();
+else window.addEventListener('load', go);
+})();</script></body></html>

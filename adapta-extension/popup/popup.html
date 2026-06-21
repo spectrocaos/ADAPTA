@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Adapta</title>
+    <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+    <header class="header">
+        <h1>Adapta</h1>
+        <p>Acessibilidade instantânea</p>
+    </header>
+
+    <!-- Tela Principal -->
+    <main id="main-screen" class="modules-list">
+        
+        <!-- Sistema de Presets -->
+        <div class="presets-container">
+            <div class="preset-header">
+                <h2>Configurações Salvas</h2>
+            </div>
+            <div class="preset-controls">
+                <select id="preset-select" class="custom-select preset-select">
+                    <option value="padrao">Padrão</option>
+                </select>
+                <button id="btn-save-preset" class="btn-action" title="Salvar configuração atual">Salvar</button>
+                <button id="btn-delete-preset" class="btn-action btn-danger" title="Excluir configuração">🗑️</button>
+            </div>
+        </div>
+
+        <!-- Controle de Escopo de Domínio -->
+        <div class="domain-toggle-container">
+            <label class="checkbox-label">
+                <input type="checkbox" id="toggle-domain-specific">
+                <span>Configurar apenas para: <strong id="current-domain">este site</strong></span>
+            </label>
+        </div>
+
+        <!-- Toggle: Tipografia -->
+        <div class="module-item">
+            <div class="module-info">
+                <h2>✨ Fonte Dyslexic</h2>
+                <p>Facilita a leitura</p>
+            </div>
+            <label class="toggle">
+                <input type="checkbox" id="toggle-typography">
+                <span class="slider"></span>
+            </label>
+        </div>
+
+        <!-- Toggle: Animações -->
+        <div class="module-item">
+            <div class="module-info">
+                <h2>⏸ Animações</h2>
+                <p>Pausa transições e efeitos da página</p>
+            </div>
+            <label class="toggle">
+                <input type="checkbox" id="toggle-animations">
+                <span class="slider"></span>
+            </label>
+        </div>
+
+        <!-- Toggle: Limpeza -->
+        <div class="module-item">
+            <div class="module-info">
+                <h2>🧹 Limpeza Básica</h2>
+                <p>Esconde banners laterais e popups</p>
+            </div>
+            <label class="toggle">
+                <input type="checkbox" id="toggle-cleaner">
+                <span class="slider"></span>
+            </label>
+        </div>
+        <!-- Toggle: Régua de Leitura -->
+        <div class="module-item">
+            <div class="module-info">
+                <h2>📏 Régua de Leitura</h2>
+                <p>Aumenta o foco na linha atual</p>
+            </div>
+            <label class="toggle">
+                <input type="checkbox" id="toggle-ruler">
+                <span class="slider"></span>
+            </label>
+        </div>
+
+        <!-- Toggle: Leitor de Áudio -->
+        <div class="module-item">
+            <div class="module-info">
+                <h2>🔊 Leitor de Áudio</h2>
+                <p>Selecione um texto para ouvir</p>
+            </div>
+            <label class="toggle">
+                <input type="checkbox" id="toggle-audio">
+                <span class="slider"></span>
+            </label>
+        </div>
+
+        <!-- Toggle: Modo Leitura -->
+        <div class="module-item">
+            <div class="module-info">
+                <h2>📖 Modo Leitura Focada</h2>
+                <p>Extrai apenas o texto do artigo</p>
+            </div>
+            <label class="toggle">
+                <input type="checkbox" id="toggle-reader">
+                <span class="slider"></span>
+            </label>
+        </div>
+
+        <!-- Seletor de Cores -->
+        <div class="module-item module-dropdown">
+            <div class="module-info">
+                <h2>🎨 Filtros Visuais</h2>
+                <p>Daltonismo e Baixa Visão</p>
+            </div>
+            <select id="select-color" class="custom-select">
+                <option value="none">Desativado</option>
+                <option value="high-contrast">Alto Contraste</option>
+                <option value="protanopia">Protanopia (Vermelho)</option>
+                <option value="deuteranopia">Deuteranopia (Verde)</option>
+                <option value="tritanopia">Tritanopia (Azul)</option>
+            </select>
+        </div>
+    </main>
+
+    <script src="popup.js"></script>
+</body>
+</html>

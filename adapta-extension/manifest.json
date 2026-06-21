@@ -1,0 +1,57 @@
+{
+  "manifest_version": 3,
+  "name": "Adapta",
+  "version": "0.1.0",
+  "description": "Adapta qualquer site às suas necessidades visuais e funcionais.",
+  "permissions": [
+    "activeTab",
+    "scripting",
+    "storage"
+  ],
+  "host_permissions": [
+    "<all_urls>"
+  ],
+  "icons": {
+    "16": "assets/icons/icon.png",
+    "48": "assets/icons/icon.png",
+    "128": "assets/icons/icon.png"
+  },
+  "background": {
+    "service_worker": "background/background.js",
+    "type": "module"
+  },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": [
+        "content/modules/typography.js",
+        "content/modules/animations.js",
+        "content/modules/cleaner.js",
+        "content/modules/ruler.js",
+        "content/modules/audio.js",
+        "content/modules/colors.js",
+        "content/modules/reader.js",
+        "content/content.js"
+      ],
+      "run_at": "document_idle"
+    }
+  ],
+  "action": {
+    "default_title": "Abrir Adapta",
+    "default_popup": "popup/popup.html",
+    "default_icon": {
+      "16": "assets/icons/icon.png",
+      "48": "assets/icons/icon.png",
+      "128": "assets/icons/icon.png"
+    }
+  },
+  "web_accessible_resources": [
+    {
+      "resources": [
+        "assets/fonts/*",
+        "assets/filters/*"
+      ],
+      "matches": ["<all_urls>"]
+    }
+  ]
+}
