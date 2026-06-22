@@ -313,8 +313,14 @@
 /* ── Profile Cards ────────────────────────────────────────── */
 .profile-cards {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 1fr;
   gap: var(--space-3);
+}
+
+@media (min-width: 640px) {
+  .profile-cards {
+    grid-template-columns: 1fr 1fr;
+  }
 }
 
 .profile-card {
@@ -386,8 +392,14 @@
 
 .condition-grid {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 1fr;
   gap: var(--space-2);
+}
+
+@media (min-width: 640px) {
+  .condition-grid {
+    grid-template-columns: 1fr 1fr;
+  }
 }
 
 .condition-chip {
@@ -425,54 +437,4 @@
   color: var(--color-text-muted);
 }
 
-/* ── Social Login ── */
-.auth-divider {
-  display: flex;
-  align-items: center;
-  text-align: center;
-  color: var(--color-text-muted);
-  margin: var(--space-4) 0;
-  font-size: var(--text-xs);
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-}
-
-.auth-divider::before,
-.auth-divider::after {
-  content: '';
-  flex: 1;
-  border-bottom: 1px solid var(--color-border);
-}
-
-.auth-divider::before {
-  margin-right: var(--space-3);
-}
-
-.auth-divider::after {
-  margin-left: var(--space-3);
-}
-
-.btn-google {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: var(--space-2);
-  background: var(--color-surface);
-  border: 1px solid var(--color-border);
-  color: var(--color-text);
-  font-weight: var(--weight-semibold);
-  transition: all var(--transition-fast) ease;
-  cursor: pointer;
-  padding: var(--space-3) var(--space-4);
-  border-radius: var(--radius-lg);
-}
-
-.btn-google:hover:not(:disabled) {
-  background: var(--color-bg-secondary);
-  border-color: var(--color-text-muted);
-}
-
-.btn-google:active:not(:disabled) {
-  transform: scale(0.98);
-}
 

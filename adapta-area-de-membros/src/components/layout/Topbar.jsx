@@ -1,10 +1,10 @@
 import { useAuth } from '../../hooks/useAuth'
 import { useNavigate } from 'react-router-dom'
-import { LogOut, Sun, Moon, ZapOff } from 'lucide-react'
+import { LogOut, Sun, Moon, ZapOff, Menu } from 'lucide-react'
 import { useState } from 'react'
 import './Topbar.css'
 
-export default function Topbar() {
+export default function Topbar({ toggleSidebar }) {
   const { user, logout } = useAuth()
   const navigate = useNavigate()
   const [lowStimulation, setLowStimulation] = useState(
@@ -25,6 +25,13 @@ export default function Topbar() {
   return (
     <div className="topbar">
       <div className="topbar-left">
+        <button 
+          className="topbar-mobile-menu-btn" 
+          onClick={toggleSidebar}
+          aria-label="Abrir Menu"
+        >
+          <Menu size={24} />
+        </button>
         {/* Breadcrumb ou título da página pode ser inserido aqui via contexto */}
       </div>
       <div className="topbar-right">

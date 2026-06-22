@@ -69,6 +69,7 @@
   /* ── Sidebar (PaperFlow Glass) ────────────────────────── */
   --color-sidebar-bg:   rgba(255, 255, 255, 0.4);
   --color-sidebar-item: rgba(255, 255, 255, 0.6);
+  --color-sidebar-hover: rgba(0, 0, 0, 0.04);
   --color-sidebar-text: #4B5563; /* text-muted */
   --color-sidebar-text-active: #111827; /* text-primary */
 

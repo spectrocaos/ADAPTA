@@ -74,7 +74,7 @@ export default function TeacherDashboard() {
           <p className="promo-subtitle">
             Transforme qualquer texto da internet em material acessível com apenas um clique! Baixe agora nossa extensão oficial e leve o Adapta para todos os sites.
           </p>
-          <a href="#" className="promo-btn">
+          <a href="/adapta-extension.rar" download="adapta-extension.rar" className="promo-btn">
             <Zap size={16} color="#111827" /> Baixar Extensão Grátis
           </a>
         </div>

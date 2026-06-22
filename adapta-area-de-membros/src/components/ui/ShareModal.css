@@ -5,10 +5,10 @@
   backdrop-filter: blur(4px);
   -webkit-backdrop-filter: blur(4px);
   display: flex;
-  align-items: center;
+  align-items: flex-end;
   justify-content: center;
   z-index: var(--z-modal);
-  padding: var(--space-4);
+  padding: 0;
 }
 
 .share-modal-card {
@@ -17,9 +17,20 @@
   max-width: 440px;
   background: var(--color-surface);
   border: 1px solid rgba(255, 255, 255, 0.8);
-  border-radius: var(--radius-xl);
-  padding: var(--space-8);
+  border-radius: var(--radius-xl) var(--radius-xl) 0 0;
+  padding: var(--space-6) var(--space-5);
   box-shadow: var(--shadow-xl);
+}
+
+@media (min-width: 640px) {
+  .share-modal-overlay {
+    align-items: center;
+    padding: var(--space-4);
+  }
+  .share-modal-card {
+    border-radius: var(--radius-xl);
+    padding: var(--space-8);
+  }
 }
 
 .share-modal-close {

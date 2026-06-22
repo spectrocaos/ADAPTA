@@ -7,13 +7,22 @@
 /* ── Welcome ──────────────────────────────────────────────── */
 .student-welcome {
   display: flex;
-  align-items: center;
-  justify-content: space-between;
+  flex-direction: column;
+  align-items: flex-start;
   gap: var(--space-6);
-  padding: var(--space-8);
+  padding: var(--space-6);
   background: var(--color-surface);
   border: 1.5px solid var(--color-border);
   border-radius: var(--radius-2xl);
+}
+
+@media (min-width: 640px) {
+  .student-welcome {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--space-8);
+  }
 }
 
 .student-welcome-content {
@@ -50,18 +59,32 @@
 .student-trail-cta:hover { filter: brightness(1.1); text-decoration: none; color: white; }
 
 .student-welcome-icon {
+  display: none;
   width: 80px; height: 80px;
   border-radius: var(--radius-2xl);
-  display: flex; align-items: center; justify-content: center;
+  align-items: center; justify-content: center;
   flex-shrink: 0;
   box-shadow: var(--shadow-lg);
 }
 
+@media (min-width: 640px) {
+  .student-welcome-icon {
+    display: flex;
+  }
+}
+
 /* ── Quick actions ────────────────────────────────────────── */
 .student-quick-actions {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
+  display: flex;
+  flex-direction: column;
   gap: var(--space-4);
+}
+
+@media (min-width: 640px) {
+  .student-quick-actions {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
 }
 
 .student-action-card {
@@ -233,8 +256,4 @@
   transform: translateY(-1px);
 }
 
-@media (max-width: 640px) {
-  .student-quick-actions { grid-template-columns: 1fr; }
-  .student-welcome { flex-direction: column; }
-  .student-welcome-icon { display: none; }
-}
+

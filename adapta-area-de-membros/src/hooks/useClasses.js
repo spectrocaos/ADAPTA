@@ -1,61 +1,70 @@
 import { useState, useEffect, useCallback } from 'react'
-import { collection, query, onSnapshot, doc, addDoc, updateDoc, deleteDoc } from 'firebase/firestore'
-import { db } from '../firebase/config'
 import { useAuth } from './useAuth'
 
 export function useClasses() {
   const { user } = useAuth()
   const [classes, setClasses] = useState([])
 
-  // Sincronizar Turmas do Firestore
+  // Sincronizar Turmas
   useEffect(() => {
     if (!user?.id) return
 
-    const q = query(collection(db, 'classes'))
-    const unsubscribe = onSnapshot(q, (snapshot) => {
-      const list = []
-      snapshot.forEach(doc => {
-        const data = doc.data()
-        // Se for professor, filtra por teacherId
-        if (user.profile === 'teacher') {
-          if (data.teacherId === user.id) {
-            list.push({ id: doc.id, ...data })
-          }
-        } else {
-          // Se for aluno, verifica se ele está matriculado pelo nome ou ID
-          const isEnrolled = data.students?.some(
-            s => s.id === user.id || s.name?.toLowerCase() === user.name?.toLowerCase()
-          )
-          if (isEnrolled) {
-            list.push({ id: doc.id, ...data })
-          }
-        }
-      })
+    const loadClasses = () => {
+      const stored = localStorage.getItem('adapta_classes')
+      let list = stored ? JSON.parse(stored) : []
+      
+      if (user.profile === 'teacher') {
+        // Professor vê as turmas que ele criou
+        list = list.filter(c => c.teacherId === user.id)
+      } else {
+        // Aluno vê as turmas em que está matriculado
+        list = list.filter(c => c.students?.some(s => s.id === user.id || s.name?.toLowerCase() === user.name?.toLowerCase()))
+      }
+      
       list.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
       setClasses(list)
-    })
+    }
 
-    return () => unsubscribe()
+    loadClasses()
+    window.addEventListener('storage', loadClasses)
+    window.addEventListener('adapta_classes_changed', loadClasses)
+
+    return () => {
+      window.removeEventListener('storage', loadClasses)
+      window.removeEventListener('adapta_classes_changed', loadClasses)
+    }
   }, [user])
 
-  // ── Turmas ────────────────────────────────────────────────────────────────
-
-  const createClass = useCallback(async (name, grade, description) => {
-    if (!user?.id) return
+  // ── Operações CRUD ────────────────────────────────────────────────────────
+  
+  const createClass = useCallback(async (name, subject, description = '') => {
+    if (!user?.id || user.profile !== 'teacher') return
     const newClass = {
+      id: crypto.randomUUID(),
       createdAt: new Date().toISOString(),
       teacherId: user.id,
       name,
-      grade,
+      subject,
       description,
       students: [],
       sharedMaterials: []
     }
-    await addDoc(collection(db, 'classes'), newClass)
+    
+    const stored = localStorage.getItem('adapta_classes')
+    const list = stored ? JSON.parse(stored) : []
+    list.push(newClass)
+    
+    localStorage.setItem('adapta_classes', JSON.stringify(list))
+    window.dispatchEvent(new Event('adapta_classes_changed'))
   }, [user])
 
   const deleteClass = useCallback(async (id) => {
-    await deleteDoc(doc(db, 'classes', id))
+    const stored = localStorage.getItem('adapta_classes')
+    if (!stored) return
+    let list = JSON.parse(stored)
+    list = list.filter(c => c.id !== id)
+    localStorage.setItem('adapta_classes', JSON.stringify(list))
+    window.dispatchEvent(new Event('adapta_classes_changed'))
   }, [])
 
   const getClassById = useCallback((id) => {
@@ -65,84 +74,112 @@ export function useClasses() {
   // ── Alunos ────────────────────────────────────────────────────────────────
 
   const addStudent = useCallback(async (classId, studentName, condition) => {
-    const student = {
+    const stored = localStorage.getItem('adapta_classes')
+    if (!stored) return
+    let list = JSON.parse(stored)
+    
+    const classIndex = list.findIndex(c => c.id === classId)
+    if (classIndex === -1) return
+    
+    const newStudent = {
       id: crypto.randomUUID(),
       name: studentName,
       condition,
       sharedMaterials: []
     }
-    const classDocRef = doc(db, 'classes', classId)
-    const targetClass = classes.find(c => c.id === classId)
-    if (targetClass) {
-      await updateDoc(classDocRef, {
-        students: [...targetClass.students, student]
-      })
-    }
-  }, [classes])
+    
+    list[classIndex].students = list[classIndex].students || []
+    list[classIndex].students.push(newStudent)
+    
+    localStorage.setItem('adapta_classes', JSON.stringify(list))
+    window.dispatchEvent(new Event('adapta_classes_changed'))
+  }, [])
 
   const removeStudent = useCallback(async (classId, studentId) => {
-    const classDocRef = doc(db, 'classes', classId)
-    const targetClass = classes.find(c => c.id === classId)
-    if (targetClass) {
-      await updateDoc(classDocRef, {
-        students: targetClass.students.filter(s => s.id !== studentId)
-      })
-    }
-  }, [classes])
+    const stored = localStorage.getItem('adapta_classes')
+    if (!stored) return
+    let list = JSON.parse(stored)
+    
+    const classIndex = list.findIndex(c => c.id === classId)
+    if (classIndex === -1) return
+    
+    list[classIndex].students = list[classIndex].students?.filter(s => s.id !== studentId) || []
+    
+    localStorage.setItem('adapta_classes', JSON.stringify(list))
+    window.dispatchEvent(new Event('adapta_classes_changed'))
+  }, [])
 
   // ── Compartilhamento ──────────────────────────────────────────────────────
 
   const shareMaterial = useCallback(async (classId, materialId) => {
-    const classDocRef = doc(db, 'classes', classId)
-    const targetClass = classes.find(c => c.id === classId)
-    if (targetClass && !targetClass.sharedMaterials.includes(materialId)) {
-      await updateDoc(classDocRef, {
-        sharedMaterials: [...targetClass.sharedMaterials, materialId]
-      })
+    const stored = localStorage.getItem('adapta_classes')
+    if (!stored) return
+    let list = JSON.parse(stored)
+    
+    const classIndex = list.findIndex(c => c.id === classId)
+    if (classIndex === -1) return
+    
+    list[classIndex].sharedMaterials = list[classIndex].sharedMaterials || []
+    if (!list[classIndex].sharedMaterials.includes(materialId)) {
+      list[classIndex].sharedMaterials.push(materialId)
     }
-  }, [classes])
+    
+    localStorage.setItem('adapta_classes', JSON.stringify(list))
+    window.dispatchEvent(new Event('adapta_classes_changed'))
+  }, [])
 
   const unshareMaterial = useCallback(async (classId, materialId) => {
-    const classDocRef = doc(db, 'classes', classId)
-    const targetClass = classes.find(c => c.id === classId)
-    if (targetClass) {
-      await updateDoc(classDocRef, {
-        sharedMaterials: targetClass.sharedMaterials.filter(id => id !== materialId)
-      })
-    }
-  }, [classes])
+    const stored = localStorage.getItem('adapta_classes')
+    if (!stored) return
+    let list = JSON.parse(stored)
+    
+    const classIndex = list.findIndex(c => c.id === classId)
+    if (classIndex === -1) return
+    
+    list[classIndex].sharedMaterials = list[classIndex].sharedMaterials?.filter(id => id !== materialId) || []
+    
+    localStorage.setItem('adapta_classes', JSON.stringify(list))
+    window.dispatchEvent(new Event('adapta_classes_changed'))
+  }, [])
 
   const shareMaterialWithStudent = useCallback(async (classId, studentId, materialId) => {
-    const classDocRef = doc(db, 'classes', classId)
-    const targetClass = classes.find(c => c.id === classId)
-    if (targetClass) {
-      const updatedStudents = targetClass.students.map(s => {
-        if (s.id === studentId) {
-          const list = s.sharedMaterials || []
-          if (!list.includes(materialId)) {
-            return { ...s, sharedMaterials: [...list, materialId] }
-          }
-        }
-        return s
-      })
-      await updateDoc(classDocRef, { students: updatedStudents })
+    const stored = localStorage.getItem('adapta_classes')
+    if (!stored) return
+    let list = JSON.parse(stored)
+    
+    const classIndex = list.findIndex(c => c.id === classId)
+    if (classIndex === -1) return
+    
+    const studentIndex = list[classIndex].students?.findIndex(s => s.id === studentId)
+    if (studentIndex !== undefined && studentIndex !== -1) {
+      const student = list[classIndex].students[studentIndex]
+      student.sharedMaterials = student.sharedMaterials || []
+      if (!student.sharedMaterials.includes(materialId)) {
+        student.sharedMaterials.push(materialId)
+      }
     }
-  }, [classes])
+    
+    localStorage.setItem('adapta_classes', JSON.stringify(list))
+    window.dispatchEvent(new Event('adapta_classes_changed'))
+  }, [])
 
   const unshareMaterialWithStudent = useCallback(async (classId, studentId, materialId) => {
-    const classDocRef = doc(db, 'classes', classId)
-    const targetClass = classes.find(c => c.id === classId)
-    if (targetClass) {
-      const updatedStudents = targetClass.students.map(s => {
-        if (s.id === studentId) {
-          const list = s.sharedMaterials || []
-          return { ...s, sharedMaterials: list.filter(id => id !== materialId) }
-        }
-        return s
-      })
-      await updateDoc(classDocRef, { students: updatedStudents })
+    const stored = localStorage.getItem('adapta_classes')
+    if (!stored) return
+    let list = JSON.parse(stored)
+    
+    const classIndex = list.findIndex(c => c.id === classId)
+    if (classIndex === -1) return
+    
+    const studentIndex = list[classIndex].students?.findIndex(s => s.id === studentId)
+    if (studentIndex !== undefined && studentIndex !== -1) {
+      const student = list[classIndex].students[studentIndex]
+      student.sharedMaterials = student.sharedMaterials?.filter(id => id !== materialId) || []
     }
-  }, [classes])
+    
+    localStorage.setItem('adapta_classes', JSON.stringify(list))
+    window.dispatchEvent(new Event('adapta_classes_changed'))
+  }, [])
 
   return {
     classes,

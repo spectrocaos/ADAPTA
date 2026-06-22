@@ -129,11 +129,16 @@ a.btn,
   height: 100vh;
   overflow-y: auto;
   overflow-x: hidden;
-  z-index: var(--z-sticky);
-  transition: width var(--transition-fluid);
+  z-index: 100;
+  transform: translateX(-100%);
+  transition: transform var(--transition-fluid), width var(--transition-fluid);
   /* Hide scrollbars but keep scrolling functionality */
   scrollbar-width: none;
   -ms-overflow-style: none;
+}
+
+.app-sidebar.open {
+  transform: translateX(0);
 }
 
 .app-sidebar::-webkit-scrollbar {
@@ -141,8 +146,8 @@ a.btn,
 }
 
 .app-main {
-  width: calc(100vw - var(--sidebar-width));
-  margin-left: var(--sidebar-width);
+  width: 100%;
+  margin-left: 0;
   display: flex;
   flex-direction: column;
   min-height: 100vh;
@@ -159,9 +164,23 @@ a.btn,
 
 .app-content {
   flex: 1;
-  padding: var(--space-8);
+  padding: var(--space-4);
   max-width: calc(var(--content-max-width) + var(--space-16));
   width: 100%;
+}
+
+@media (min-width: 768px) {
+  .app-sidebar {
+    transform: translateX(0);
+    z-index: var(--z-sticky);
+  }
+  .app-main {
+    width: calc(100vw - var(--sidebar-width));
+    margin-left: var(--sidebar-width);
+  }
+  .app-content {
+    padding: var(--space-8);
+  }
 }
 
 /* ── Utilitários Basisly / PaperFlow ──────────────────────── */
@@ -283,12 +302,26 @@ body.theme-high-contrast .bg-decoration-blob-2 {
 .animate-float { animation: float 6s ease-in-out infinite; }
 .animate-pulse-glow { animation: pulse-glow 3s infinite; }
 
-/* ── Responsivo ───────────────────────────────────────────── */
-@media (max-width: 768px) {
-  .app-sidebar { transform: translateX(-100%); transition: transform var(--transition-fluid); }
-  .app-sidebar.open { transform: translateX(0); }
-  .app-main { margin-left: 0; }
-  .app-content { padding: var(--space-4); }
+/* ── Overlay Sidebar Mobile ── */
+.app-sidebar-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(4px);
+  z-index: 90;
+  opacity: 0;
+  transition: opacity var(--transition-normal);
+}
+.app-sidebar-overlay.open {
+  display: block;
+  opacity: 1;
+}
+
+@media (min-width: 768px) {
+  .app-sidebar-overlay.open {
+    display: none;
+  }
 }
 
 /* ── Acessibilidade e Preferências (Fase 6) ───────────────── */
@@ -312,6 +345,7 @@ body.theme-dark {
   /* Sidebar — fundo escuro congruente */
   --color-sidebar-bg:        hsl(222, 26%, 12%);
   --color-sidebar-item:      hsl(222, 22%, 18%);
+  --color-sidebar-hover:     rgba(255, 255, 255, 0.06);
   --color-sidebar-text:      hsl(220, 12%, 62%);
   --color-sidebar-text-active: hsl(220, 20%, 92%);
 
@@ -361,6 +395,7 @@ body.theme-high-contrast {
   /* Sidebar escura com bordas nítidas */
   --color-sidebar-bg:          #000000;
   --color-sidebar-item:        #1a1a1a;
+  --color-sidebar-hover:       #1a1a1a;
   --color-sidebar-text:        #cccccc;
   --color-sidebar-text-active: #ffffff;
 

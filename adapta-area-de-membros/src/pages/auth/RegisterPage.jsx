@@ -12,10 +12,9 @@ const CONDITIONS = [
 ]
 
 export default function RegisterPage() {
-  const { register, loginWithGoogle, registerWithGoogle } = useAuth()
+  const { register } = useAuth()
   const navigate = useNavigate()
   const [step, setStep] = useState(1) // 1: dados, 2: perfil
-  const [googleUserTemp, setGoogleUserTemp] = useState(null)
   const [form, setForm] = useState({
     name: '',
     email: '',
@@ -46,6 +45,11 @@ export default function RegisterPage() {
       setError('Preencha todos os campos. A senha deve ter pelo menos 6 caracteres.')
       return
     }
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+    if (!emailRegex.test(form.email.trim())) {
+      setError('Por favor, insira um e-mail válido (exemplo: usuario@dominio.com).')
+      return
+    }
     setError('')
     setStep(2)
   }
@@ -59,82 +63,24 @@ export default function RegisterPage() {
     setLoading(true)
     await new Promise(r => setTimeout(r, 700))
     try {
-      if (googleUserTemp) {
-        // Concluir cadastro via Google
-        const regResult = await registerWithGoogle(googleUserTemp.id, {
-          name: googleUserTemp.name,
-          email: googleUserTemp.email,
-          photoUrl: googleUserTemp.photoUrl,
-          profile: form.profile,
-          condition: form.condition || null
-        })
-        setLoading(false)
-        if (regResult.success) {
-          navigate('/dashboard')
-        } else {
-          setError(regResult.error)
-        }
-      } else {
-        // Cadastro tradicional
-        await register(form)
-        setLoading(false)
-        navigate('/dashboard')
-      }
+      // Cadastro tradicional
+      await register(form)
+      setLoading(false)
+      navigate('/dashboard')
     } catch (err) {
       setLoading(false)
-      setError(err.message || 'Erro ao criar conta.')
-    }
-  }
-
-  async function handleGoogleRegisterStep1() {
-    setLoading(true)
-    setError('')
-    const result = await loginWithGoogle()
-    if (result.success) {
-      if (result.isNew) {
-        setGoogleUserTemp(result.user)
-        setLoading(false)
-        setStep(2)
-      } else {
-        setLoading(false)
-        navigate('/dashboard')
+      let msg = 'Erro ao criar conta.'
+      if (err.code === 'auth/email-already-in-use') {
+        msg = 'Este e-mail já está cadastrado. Tente entrar na sua conta!'
+      } else if (err.code === 'auth/invalid-email') {
+        msg = 'O formato do e-mail inserido é inválido.'
+      } else if (err.code === 'auth/weak-password') {
+        msg = 'A senha deve ter pelo menos 6 caracteres.'
+      } else if (err.message) {
+        // Fallback para outros erros contendo código firebase ou mensagem limpa
+        msg = err.message.replace('Firebase:', '').trim()
       }
-    } else {
-      setLoading(false)
-      setError(result.error)
-    }
-  }
-
-  async function handleGoogleRegister() {
-    if (!form.profile) {
-      setError('Selecione um perfil primeiro.')
-      return
-    }
-    setLoading(true)
-    setError('')
-    const result = await loginWithGoogle(form.profile)
-    if (result.success) {
-      if (result.isNew) {
-        const regResult = await registerWithGoogle(result.user.id, {
-          name: result.user.name,
-          email: result.user.email,
-          photoUrl: result.user.photoUrl,
-          profile: form.profile,
-          condition: form.condition || null
-        })
-        setLoading(false)
-        if (regResult.success) {
-          navigate('/dashboard')
-        } else {
-          setError(regResult.error)
-        }
-      } else {
-        setLoading(false)
-        navigate('/dashboard')
-      }
-    } else {
-      setLoading(false)
-      setError(result.error)
+      setError(msg)
     }
   }
 
@@ -210,25 +156,6 @@ export default function RegisterPage() {
 
               <button id="reg-next" type="submit" className="btn-primary btn-full">
                 Continuar <ChevronRight size={16} />
-              </button>
-
-              <div className="auth-divider" style={{ margin: 'var(--space-4) 0' }}>
-                <span>ou</span>
-              </div>
-
-              <button
-                type="button"
-                className="btn-google btn-full"
-                onClick={handleGoogleRegisterStep1}
-                disabled={loading}
-              >
-                <svg className="google-icon" viewBox="0 0 24 24" width="18" height="18" style={{ marginRight: 'var(--space-2)' }}>
-                  <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" />
-                  <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" />
-                  <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z" />
-                  <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" />
-                </svg>
-                Cadastrar com o Google
               </button>
             </form>
           </>
@@ -310,29 +237,7 @@ export default function RegisterPage() {
                 </div>
               )}
 
-              {form.profile && (
-                <>
-                  <div className="auth-divider" style={{ margin: 'var(--space-4) 0' }}>
-                    <span>ou</span>
-                  </div>
 
-                  <button
-                    type="button"
-                    className="btn-google btn-full"
-                    onClick={handleGoogleRegister}
-                    disabled={loading}
-                    style={{ marginBottom: 'var(--space-4)' }}
-                  >
-                    <svg className="google-icon" viewBox="0 0 24 24" width="18" height="18" style={{ marginRight: 'var(--space-2)' }}>
-                      <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" />
-                      <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" />
-                      <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z" />
-                      <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" />
-                    </svg>
-                    Cadastrar com o Google
-                  </button>
-                </>
-              )}
 
               <div className="auth-form-row">
                 <button type="button" className="btn-ghost" onClick={() => setStep(1)}>
