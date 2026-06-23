@@ -1,6 +1,8 @@
 import { useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useSearchParams, useNavigate } from 'react-router-dom'
 import { useLibrary } from '../../hooks/useLibrary'
+import { useCreatorCourses } from '../../hooks/useCreatorCourses'
+import { mockAdaptationPipeline } from '../../services/mockAdaptationPipeline'
 import {
   FileText, Wand2, Trash2, Download, ExternalLink,
   Brain, BookOpen, Zap, Eye, Heart, FolderOpen, Share2,
@@ -39,6 +41,17 @@ export default function LibraryPage() {
   const [shareModalOpen, setShareModalOpen] = useState(false)
   const [materialToShare, setMaterialToShare] = useState(null)
 
+  const [adaptationModalOpen, setAdaptationModalOpen] = useState(false)
+  const [selectedMaterialToAdapt, setSelectedMaterialToAdapt] = useState(null)
+  const [targetProfile, setTargetProfile] = useState('tea')
+  const [lessonName, setLessonName] = useState('')
+  const [isAdapting, setIsAdapting] = useState(false)
+
+  const [searchParams] = useSearchParams()
+  const selectForCourse = searchParams.get('selectForCourse')
+  const navigate = useNavigate()
+  const { addLessonToCourse } = useCreatorCourses()
+
   const filteredMaterials = materials.filter(m => {
     const matchCondition = filterCondition === 'all' || m.condition === filterCondition
     const matchFormat = filterFormat === 'all' || m.format === filterFormat
@@ -63,6 +76,27 @@ export default function LibraryPage() {
     if (window.confirm('Tem certeza que deseja deletar este material?')) {
       deleteMaterial(id)
     }
+  }
+
+  const handleSelectForCourse = (material) => {
+    if (!selectForCourse) return
+    setSelectedMaterialToAdapt(material)
+    setLessonName(material.format ? `Material Adaptado (${material.format})` : 'Material Adicionado')
+    setAdaptationModalOpen(true)
+  }
+
+  const confirmAdaptation = async () => {
+    setIsAdapting(true)
+    const adaptation = await mockAdaptationPipeline(selectedMaterialToAdapt.original || selectedMaterialToAdapt.adapted, targetProfile)
+    
+    addLessonToCourse(selectForCourse, {
+      title: lessonName || 'Material Adicionado',
+      type: 'text',
+      duration: '5 min',
+      activities: adaptation.activities
+    })
+    setIsAdapting(false)
+    navigate(`/meus-cursos/${selectForCourse}`)
   }
 
   return (
@@ -118,9 +152,15 @@ export default function LibraryPage() {
                       <Trash2 size={16} />
                     </button>
                   </div>
-                  <button className="btn-outline-small" onClick={() => alert('Visualizador em breve!')}>
-                    <ExternalLink size={14} /> Ver completo
-                  </button>
+                  {selectForCourse ? (
+                    <button className="btn-primary" style={{ padding: '0.4rem 0.8rem', fontSize: '0.85rem' }} onClick={() => handleSelectForCourse(material)}>
+                      Selecionar
+                    </button>
+                  ) : (
+                    <button className="btn-outline-small" onClick={() => alert('Visualizador em breve!')}>
+                      <ExternalLink size={14} /> Ver completo
+                    </button>
+                  )}
                 </div>
               </div>
             )
@@ -198,6 +238,52 @@ export default function LibraryPage() {
         onClose={() => setShareModalOpen(false)} 
         materialName={materialToShare?.condition} 
       />
+
+      {adaptationModalOpen && (
+        <div className="modal-overlay">
+          <div className="modal-content animate-fade-in" style={{ maxWidth: '500px' }}>
+            {isAdapting ? (
+              <div style={{ textAlign: 'center', padding: '2rem' }}>
+                <Brain size={48} color="var(--color-primary)" className="pulse" style={{ margin: '0 auto 1rem auto' }} />
+                <h3>Adaptando para o perfil...</h3>
+                <p>O motor de IA está extraindo as atividades para este curso.</p>
+              </div>
+            ) : (
+              <>
+                <h3 style={{ marginBottom: '1.5rem' }}>Configurar Nova Aula</h3>
+                
+                <div style={{ marginBottom: '1rem' }}>
+                  <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 500 }}>Nome da Aula</label>
+                  <input 
+                    type="text" 
+                    value={lessonName} 
+                    onChange={e => setLessonName(e.target.value)}
+                    style={{ width: '100%', padding: '0.75rem', borderRadius: '8px', border: '1px solid var(--color-border)' }}
+                  />
+                </div>
+
+                <div style={{ marginBottom: '1.5rem' }}>
+                  <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 500 }}>Perfil de adaptação para esta aula</label>
+                  <select 
+                    value={targetProfile} 
+                    onChange={e => setTargetProfile(e.target.value)}
+                    style={{ width: '100%', padding: '0.75rem', borderRadius: '8px', border: '1px solid var(--color-border)' }}
+                  >
+                    {CONDITIONS.filter(c => c.id !== 'all').map(cond => (
+                      <option key={cond.id} value={cond.id}>{cond.label}</option>
+                    ))}
+                  </select>
+                </div>
+
+                <div style={{ display: 'flex', gap: '0.5rem', justifyContent: 'flex-end' }}>
+                  <button className="btn-secondary" onClick={() => setAdaptationModalOpen(false)}>Cancelar</button>
+                  <button className="btn-primary" onClick={confirmAdaptation}>Criar Aula Adaptada</button>
+                </div>
+              </>
+            )}
+          </div>
+        </div>
+      )}
     </div>
   )
 }

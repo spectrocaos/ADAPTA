@@ -21,25 +21,37 @@ export function AuthProvider({ children }) {
     // Simula delay de rede
     await new Promise(r => setTimeout(r, 600))
     
-    // Validar se email já existe
     const existingUsersStr = localStorage.getItem('adapta_all_users') || '[]'
-    const existingUsers = JSON.parse(existingUsersStr)
-    if (existingUsers.some(u => u.email === email)) {
-      throw new Error('Firebase: Error (auth/email-already-in-use).') // Simulando o mesmo erro do firebase para manter compatibilidade com a UI
+    let existingUsers = JSON.parse(existingUsersStr)
+    
+    const existingUserIndex = existingUsers.findIndex(u => u.email === email)
+    let newUser
+    
+    if (existingUserIndex > -1) {
+      // Atualiza o usuário existente para simulação sem erros
+      newUser = {
+        ...existingUsers[existingUserIndex],
+        name,
+        password,
+        profile,
+        condition: condition || null,
+      }
+      existingUsers[existingUserIndex] = newUser
+    } else {
+      // Cria um novo
+      newUser = {
+        id: crypto.randomUUID(),
+        name,
+        email,
+        password, // Não seguro para prod, mas ok para local mock
+        profile,
+        condition: condition || null,
+        onboarded: false,
+        createdAt: new Date().toISOString(),
+      }
+      existingUsers.push(newUser)
     }
 
-    const newUser = {
-      id: crypto.randomUUID(),
-      name,
-      email,
-      password, // Não seguro para prod, mas ok para local mock
-      profile,
-      condition: condition || null,
-      onboarded: false,
-      createdAt: new Date().toISOString(),
-    }
-
-    existingUsers.push(newUser)
     localStorage.setItem('adapta_all_users', JSON.stringify(existingUsers))
     localStorage.setItem('adapta_user', JSON.stringify(newUser))
     setUser(newUser)

@@ -20,6 +20,7 @@ import './Sidebar.css'
 const teacherNav = [
   { to: '/dashboard', icon: LayoutDashboard, label: 'Área de Trabalho' },
   { to: '/conversor', icon: Wand2,           label: 'Estúdio de materiais' },
+  { to: '/meus-cursos',icon: BookMarked,     label: 'Meus Cursos' },
   { to: '/biblioteca',icon: Library,         label: 'Biblioteca de materiais' },
   { to: '/perfis',    icon: Bookmark,        label: 'Perfis salvos' },
   { to: '/turmas',    icon: Users,           label: 'Turmas criadas' },
@@ -29,6 +30,7 @@ const teacherNav = [
 
 const studentNav = [
   { to: '/dashboard',        icon: LayoutDashboard, label: 'Área de Estudo' },
+  { to: '/meus-cursos',      icon: BookMarked,      label: 'Meus Cursos' },
   { to: '/cursos',           icon: BookOpen,        label: 'Cursos de apoio' },
   { to: '/materiais',        icon: FolderOpen,      label: 'Materiais' },
   { to: '/meus-professores', icon: GraduationCap,   label: 'Meus Professores' },

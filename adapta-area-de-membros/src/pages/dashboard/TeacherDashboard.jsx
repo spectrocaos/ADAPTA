@@ -4,6 +4,7 @@ import { useAuth } from '../../hooks/useAuth'
 import { useCourseProgress } from '../../hooks/useCourseProgress'
 import { useClasses } from '../../hooks/useClasses'
 import { useLibrary } from '../../hooks/useLibrary'
+import { useCreatorCourses } from '../../hooks/useCreatorCourses'
 import { TRAILS, COURSES } from '../../data/courses'
 import {
   Brain, BookOpen, Zap, Eye, Heart,
@@ -26,9 +27,11 @@ export default function TeacherDashboard() {
   const { getTrailProgress, getCourseProgress } = useCourseProgress()
   const { classes } = useClasses()
   const { materials } = useLibrary()
+  const { creatorCourses, getCourseStats } = useCreatorCourses()
   
   const carouselRef = useRef(null)
   const studentsCarouselRef = useRef(null)
+  const creatorCoursesRef = useRef(null)
 
   const scrollCarousel = (ref, direction) => {
     if (ref.current) {
@@ -115,6 +118,76 @@ export default function TeacherDashboard() {
           )
         })}
       </div>
+
+      {/* Cursos Criados pelo Professor */}
+      {creatorCourses && creatorCourses.length > 0 && (
+        <div className="trails-section">
+          <div className="section-header">
+            <h2 className="section-title">Cursos criados</h2>
+            <Link to="/meus-cursos" className="section-link">
+              Ver todos os cursos <ChevronRight size={14} />
+            </Link>
+          </div>
+
+          <div className="trails-grid" ref={creatorCoursesRef}>
+            {creatorCourses.map(course => {
+              const stats = getCourseStats(course)
+              const cond = CONDITIONS.find(c => c.id === course.profileId) || CONDITIONS[0]
+              const Icon = cond.icon
+
+              return (
+                <div key={course.id} className="trail-progress-card">
+                  <div className="trail-progress-header">
+                    <div className="trail-progress-icon" style={{ background: cond.color, color: 'white' }}>
+                      <Icon size={20} />
+                    </div>
+                    <div className="trail-progress-info">
+                      <span className="trail-progress-name">{course.title}</span>
+                      <span className="trail-progress-meta">Turma vinculada · {stats.total} aulas</span>
+                    </div>
+                    <span className="trail-progress-pct" style={{ color: 'var(--color-text)' }}>
+                      {stats.percent}%
+                    </span>
+                  </div>
+
+                  <div className="trail-progress-bar">
+                    <div
+                      className="trail-progress-fill"
+                      style={{ width: `${stats.percent}%`, background: cond.color }}
+                    />
+                  </div>
+
+                  <div className="trail-progress-footer" style={{ display: 'flex', gap: '0.5rem', marginTop: '1rem', borderTop: 'none', padding: '0 1.25rem 1.25rem 1.25rem' }}>
+                    <Link to={`/meus-cursos/${course.id}`} className="btn-secondary" style={{ flex: 1, padding: '0.4rem', justifyContent: 'center', fontSize: '0.85rem' }}>
+                      Editar
+                    </Link>
+                    <Link to={`/cursos/${course.id}`} className="btn-outline-small" style={{ flex: 1, padding: '0.4rem', justifyContent: 'center', fontSize: '0.85rem', borderColor: cond.color, color: cond.color }}>
+                      Ver Curso
+                    </Link>
+                  </div>
+                </div>
+              )
+            })}
+          </div>
+          
+          <div className="carousel-nav">
+            <button 
+              className="carousel-btn" 
+              onClick={() => scrollCarousel(creatorCoursesRef, 'left')}
+              aria-label="Rolar para a esquerda"
+            >
+              <ArrowLeft size={18} />
+            </button>
+            <button 
+              className="carousel-btn" 
+              onClick={() => scrollCarousel(creatorCoursesRef, 'right')}
+              aria-label="Rolar para a direita"
+            >
+              <ArrowRight size={18} />
+            </button>
+          </div>
+        </div>
+      )}
 
       {/* Trail progress */}
       <div className="trails-section">

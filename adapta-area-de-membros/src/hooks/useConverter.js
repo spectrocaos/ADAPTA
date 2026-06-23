@@ -48,6 +48,12 @@ export function useConverter() {
       }
 
       setLoadingMsg('Adaptando material com Inteligência Artificial...')
+      await new Promise(r => setTimeout(r, 1500))
+      setLoadingMsg('Analisando estrutura e extraindo conceitos chave...')
+      await new Promise(r => setTimeout(r, 2000))
+      setLoadingMsg('Fragmentando conteúdo em blocos de atividade...')
+      await new Promise(r => setTimeout(r, 2000))
+      
       const adaptedMarkdown = await convertMaterial(textToConvert, condition, params)
       
       setResult({

@@ -14,6 +14,9 @@ import StudentDashboard from '../pages/dashboard/StudentDashboard'
 import CourseCatalogPage from '../pages/courses/CourseCatalogPage'
 import CourseDetailPage from '../pages/courses/CourseDetailPage'
 import LessonPlayerPage from '../pages/courses/LessonPlayerPage'
+import MyCoursesPage from '../pages/courses/MyCoursesPage'
+import CourseEditorPage from '../pages/courses/CourseEditorPage'
+import LessonEditorPage from '../pages/courses/LessonEditorPage'
 
 // Converter
 import ConverterPage from '../pages/converter/ConverterPage'
@@ -51,8 +54,11 @@ function ProtectedRoute({ children, requireProfile }) {
     return <Navigate to="/dashboard" replace />
   }
 
-  if (requireProfile && user.profile !== requireProfile) {
-    return <Navigate to="/dashboard" replace />
+  if (requireProfile) {
+    const profiles = Array.isArray(requireProfile) ? requireProfile : [requireProfile]
+    if (!profiles.includes(user.profile)) {
+      return <Navigate to="/dashboard" replace />
+    }
   }
   return children
 }
@@ -88,9 +94,50 @@ export default function AppRouter() {
           <Route path="dashboard" element={<DashboardRouter />} />
 
           {/* Cursos — ambos os perfis */}
-          <Route path="cursos" element={<CourseCatalogPage />} />
-          <Route path="cursos/:courseId" element={<CourseDetailPage />} />
-          <Route path="cursos/:courseId/aulas/:lessonId" element={<LessonPlayerPage />} />
+          <Route path="cursos" element={
+            <ProtectedRoute requireProfile={['student', 'teacher']}>
+              <CourseCatalogPage />
+            </ProtectedRoute>
+          } />
+          <Route path="cursos/:courseId" element={
+            <ProtectedRoute requireProfile={['student', 'teacher']}>
+              <CourseDetailPage />
+            </ProtectedRoute>
+          } />
+          <Route path="cursos/:courseId/aulas/:lessonId" element={
+            <ProtectedRoute requireProfile={['student', 'teacher']}>
+              <LessonPlayerPage />
+            </ProtectedRoute>
+          } />
+
+          {/* Módulo de Criação de Cursos / Meus Cursos */}
+          <Route path="meus-cursos" element={
+            <ProtectedRoute requireProfile={['teacher', 'student']}>
+              <MyCoursesPage />
+            </ProtectedRoute>
+          } />
+          <Route path="meus-cursos/:courseId" element={
+            <ProtectedRoute requireProfile="teacher">
+              <CourseEditorPage />
+            </ProtectedRoute>
+          } />
+          <Route path="meus-cursos/:courseId/aulas/:lessonId" element={
+            <ProtectedRoute requireProfile="teacher">
+              <LessonEditorPage />
+            </ProtectedRoute>
+          } />
+
+          {/* Visualização de Cursos Criados (Mantém Meus Cursos ativo no menu) */}
+          <Route path="meus-cursos/:courseId/view" element={
+            <ProtectedRoute requireProfile={['teacher', 'student']}>
+              <CourseDetailPage />
+            </ProtectedRoute>
+          } />
+          <Route path="meus-cursos/:courseId/view/aulas/:lessonId" element={
+            <ProtectedRoute requireProfile={['teacher', 'student']}>
+              <LessonPlayerPage />
+            </ProtectedRoute>
+          } />
 
           {/* Conversor — apenas Professor */}
           <Route path="conversor" element={

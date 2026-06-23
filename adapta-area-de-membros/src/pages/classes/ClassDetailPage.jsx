@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import { useClasses } from '../../hooks/useClasses'
 import { useLibrary } from '../../hooks/useLibrary'
-import { Users, FolderOpen, Plus, Trash2, ArrowLeft, Brain, BookOpen, Zap, Eye, Check, Share2 } from 'lucide-react'
+import { Users, FolderOpen, Plus, Trash2, ArrowLeft, Brain, BookOpen, Zap, Eye, Check, Share2, Search } from 'lucide-react'
 import SelectMaterialModal from '../../components/ui/SelectMaterialModal'
 import './ClassDetailPage.css'
 
@@ -11,6 +11,15 @@ const CONDITIONS = [
   { id: 'dyslexia', label: 'Dislexia', icon: BookOpen, color: 'var(--color-dyslexia)' },
   { id: 'adhd', label: 'TDAH', icon: Zap, color: 'var(--color-adhd)' },
   { id: 'color_blind', label: 'Daltonismo', icon: Eye, color: 'var(--color-color-blind)' },
+]
+
+const PLATFORM_STUDENTS = [
+  { id: 'usr-1', name: 'João Silva', condition: 'tea' },
+  { id: 'usr-2', name: 'Maria Souza', condition: 'dyslexia' },
+  { id: 'usr-3', name: 'Pedro Santos', condition: 'adhd' },
+  { id: 'usr-4', name: 'Ana Clara', condition: 'color_blind' },
+  { id: 'usr-5', name: 'Lucas Oliveira', condition: 'tea' },
+  { id: 'usr-6', name: 'Beatriz Costa', condition: 'adhd' },
 ]
 
 export default function ClassDetailPage() {
@@ -27,6 +36,8 @@ export default function ClassDetailPage() {
   const [selectedStudentForShare, setSelectedStudentForShare] = useState(null)
   const [selectedStudentForView, setSelectedStudentForView] = useState(null)
   const [studentForm, setStudentForm] = useState({ name: '', condition: 'tea' })
+  const [studentSearchTerm, setStudentSearchTerm] = useState('')
+  const [selectedStudentId, setSelectedStudentId] = useState(null)
 
   const currentClass = getClassById(classId)
 
@@ -46,9 +57,12 @@ export default function ClassDetailPage() {
 
   const handleAddStudent = (e) => {
     e.preventDefault()
-    if (!studentForm.name) return
-    addStudent(classId, studentForm.name, studentForm.condition)
-    setStudentForm({ name: '', condition: 'tea' })
+    if (!selectedStudentId) return
+    const stu = PLATFORM_STUDENTS.find(s => s.id === selectedStudentId)
+    if (!stu) return
+    addStudent(classId, stu.name, stu.condition)
+    setSelectedStudentId(null)
+    setStudentSearchTerm('')
     setIsStudentModalOpen(false)
   }
 
@@ -195,26 +209,56 @@ export default function ClassDetailPage() {
             <h2 className="modal-title">Adicionar Aluno</h2>
             <form onSubmit={handleAddStudent} className="modal-form">
               <div className="form-group">
-                <label>Nome do Aluno</label>
-                <input 
-                  type="text" 
-                  required 
-                  value={studentForm.name}
-                  onChange={e => setStudentForm({ ...studentForm, name: e.target.value })}
-                />
+                <label>Buscar aluno cadastrado na plataforma</label>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', padding: '0.75rem', border: '1px solid var(--color-border)', borderRadius: '6px', background: 'var(--color-surface)', marginBottom: '1rem' }}>
+                  <Search size={18} color="var(--color-text-muted)" />
+                  <input 
+                    type="text" 
+                    placeholder="Ex: João Silva" 
+                    style={{ border: 'none', background: 'transparent', flex: 1, outline: 'none' }}
+                    value={studentSearchTerm}
+                    onChange={e => setStudentSearchTerm(e.target.value)}
+                  />
+                </div>
+                
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', maxHeight: '200px', overflowY: 'auto' }}>
+                  {PLATFORM_STUDENTS.filter(s => s.name.toLowerCase().includes(studentSearchTerm.toLowerCase())).map(s => {
+                    const cond = CONDITIONS.find(c => c.id === s.condition)
+                    const isSelected = selectedStudentId === s.id
+                    return (
+                      <div 
+                        key={s.id} 
+                        onClick={() => setSelectedStudentId(s.id)}
+                        style={{
+                          display: 'flex', alignItems: 'center', gap: '1rem', padding: '0.75rem', 
+                          border: isSelected ? `2px solid ${cond?.color}` : '1px solid var(--color-border)',
+                          borderRadius: '8px', cursor: 'pointer', background: isSelected ? `color-mix(in srgb, ${cond?.color} 10%, white)` : 'var(--color-surface)'
+                        }}
+                      >
+                        <div style={{ width: '32px', height: '32px', borderRadius: '50%', background: cond?.color, color: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 'bold' }}>
+                          {s.name[0].toUpperCase()}
+                        </div>
+                        <div>
+                          <p style={{ fontWeight: 'var(--weight-semibold)', color: 'var(--color-text)', marginBottom: '0.25rem' }}>{s.name}</p>
+                          <span style={{ fontSize: '0.75rem', padding: '0.1rem 0.5rem', borderRadius: '4px', background: `color-mix(in srgb, ${cond?.color} 15%, white)`, color: cond?.color }}>
+                            {cond?.label}
+                          </span>
+                        </div>
+                      </div>
+                    )
+                  })}
+                  {PLATFORM_STUDENTS.filter(s => s.name.toLowerCase().includes(studentSearchTerm.toLowerCase())).length === 0 && (
+                    <p style={{ color: 'var(--color-text-muted)', fontSize: '0.85rem', textAlign: 'center', padding: '1rem 0' }}>Nenhum aluno encontrado.</p>
+                  )}
+                </div>
               </div>
-              <div className="form-group">
-                <label>Condição (Adaptação primária)</label>
-                <select 
-                  value={studentForm.condition}
-                  onChange={e => setStudentForm({ ...studentForm, condition: e.target.value })}
-                >
-                  {CONDITIONS.map(c => <option key={c.id} value={c.id}>{c.label}</option>)}
-                </select>
-              </div>
-              <div className="modal-actions">
-                <button type="button" className="btn-outline" onClick={() => setIsStudentModalOpen(false)}>Cancelar</button>
-                <button type="submit" className="btn-primary">Adicionar</button>
+              <div className="modal-actions" style={{ marginTop: '1.5rem' }}>
+                <button type="button" className="btn-outline" onClick={() => {
+                  setIsStudentModalOpen(false)
+                  setSelectedStudentId(null)
+                  setStudentSearchTerm('')
+                }}>Cancelar</button>
+                <button type="submit" className="btn-primary" disabled={!selectedStudentId}>Adicionar à Turma</button>
               </div>
             </form>
           </div>

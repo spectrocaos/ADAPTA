@@ -1,8 +1,10 @@
 import { useEffect, useState } from 'react'
-import { Link, useLocation } from 'react-router-dom'
+import { Link, useLocation, useSearchParams, useNavigate } from 'react-router-dom'
 import ReactMarkdown from 'react-markdown'
 import { useConverter } from '../../hooks/useConverter'
 import { useLibrary } from '../../hooks/useLibrary'
+import { useCreatorCourses } from '../../hooks/useCreatorCourses'
+import { mockAdaptationPipeline } from '../../services/mockAdaptationPipeline'
 import {
   FileText, FileUp, Video, Settings2, Sparkles,
   Download, BookmarkPlus, ArrowRight, ArrowLeft,
@@ -69,10 +71,19 @@ export default function ConverterPage() {
   } = useConverter()
 
   const { saveMaterial, saveProfile } = useLibrary()
+  const { addLessonToCourse } = useCreatorCourses()
   const location = useLocation()
+  const [searchParams] = useSearchParams()
+  const courseId = searchParams.get('courseId')
+  const navigate = useNavigate()
   
   const [outputFormat, setOutputFormat] = useState('resumo_texto')
   const [shareModalOpen, setShareModalOpen] = useState(false)
+  
+  const [courseModalOpen, setCourseModalOpen] = useState(false)
+  const [targetProfile, setTargetProfile] = useState(condition || 'tea')
+  const [lessonName, setLessonName] = useState('')
+  const [isAdapting, setIsAdapting] = useState(false)
 
   // Se veio da página de perfis com um preset, aplica e vai pro step 1 (ou 2)
   useEffect(() => {
@@ -116,6 +127,36 @@ export default function ConverterPage() {
       format: outputFormat
     })
     alert('Material salvo na sua biblioteca!')
+  }
+
+  const handleSaveToCourse = async () => {
+    if (!result || !courseId) return
+    setTargetProfile(condition || 'tea')
+    setLessonName(outputFormat === 'resumo_texto' ? 'Resumo Adaptado' : 'Material Adaptado')
+    setCourseModalOpen(true)
+  }
+
+  const confirmCreateLesson = async () => {
+    setIsAdapting(true)
+    const adaptation = await mockAdaptationPipeline(result.original, targetProfile)
+    
+    addLessonToCourse(courseId, {
+      title: lessonName || 'Material Adaptado',
+      type: 'text',
+      duration: '5 min',
+      activities: adaptation.activities
+    })
+    
+    // Salva na biblioteca também
+    saveMaterial({
+      condition: result.condition,
+      original: result.original,
+      adapted: result.adapted,
+      format: outputFormat
+    })
+    
+    setIsAdapting(false)
+    navigate(`/meus-cursos/${courseId}`)
   }
 
   const handleSaveProfile = () => {
@@ -366,9 +407,15 @@ export default function ConverterPage() {
             <h2 className="step-title" style={{ textAlign: 'center', marginBottom: '0' }}>Adaptação Concluída!</h2>
             <div className="result-header" style={{ justifyContent: 'center' }}>
               <div className="result-actions">
-                <button className="btn-primary" onClick={() => setShareModalOpen(true)}>
-                  <Share2 size={16} /> Compartilhar com aluno
-                </button>
+                {courseId ? (
+                  <button className="btn-primary" onClick={handleSaveToCourse}>
+                    <BookmarkPlus size={16} /> Salvar no Curso
+                  </button>
+                ) : (
+                  <button className="btn-primary" onClick={() => setShareModalOpen(true)}>
+                    <Share2 size={16} /> Compartilhar com aluno
+                  </button>
+                )}
                 <button className="btn-secondary" onClick={handleDownload}>
                   <Download size={16} /> Baixar
                 </button>
@@ -408,6 +455,52 @@ export default function ConverterPage() {
         onClose={() => setShareModalOpen(false)} 
         materialName={result?.condition} 
       />
+
+      {courseModalOpen && (
+        <div className="modal-overlay">
+          <div className="modal-content animate-fade-in" style={{ maxWidth: '500px', background: 'white', padding: '2rem', borderRadius: '16px' }}>
+            {isAdapting ? (
+              <div style={{ textAlign: 'center', padding: '2rem' }}>
+                <Brain size={48} color="var(--color-primary)" className="pulse" style={{ margin: '0 auto 1rem auto' }} />
+                <h3>Adaptando para o perfil...</h3>
+                <p>O motor de IA está extraindo as atividades para este curso.</p>
+              </div>
+            ) : (
+              <>
+                <h3 style={{ marginBottom: '1.5rem' }}>Configurar Nova Aula</h3>
+                
+                <div style={{ marginBottom: '1rem' }}>
+                  <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 500 }}>Nome da Aula</label>
+                  <input 
+                    type="text" 
+                    value={lessonName} 
+                    onChange={e => setLessonName(e.target.value)}
+                    style={{ width: '100%', padding: '0.75rem', borderRadius: '8px', border: '1px solid var(--color-border)' }}
+                  />
+                </div>
+
+                <div style={{ marginBottom: '1.5rem' }}>
+                  <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 500 }}>Perfil de adaptação para esta aula</label>
+                  <select 
+                    value={targetProfile} 
+                    onChange={e => setTargetProfile(e.target.value)}
+                    style={{ width: '100%', padding: '0.75rem', borderRadius: '8px', border: '1px solid var(--color-border)' }}
+                  >
+                    {CONDITIONS.map(cond => (
+                      <option key={cond.id} value={cond.id}>{cond.label}</option>
+                    ))}
+                  </select>
+                </div>
+                
+                <div style={{ display: 'flex', gap: '0.5rem', justifyContent: 'flex-end' }}>
+                  <button className="btn-secondary" onClick={() => setCourseModalOpen(false)}>Cancelar</button>
+                  <button className="btn-primary" onClick={confirmCreateLesson}>Criar Aula Adaptada</button>
+                </div>
+              </>
+            )}
+          </div>
+        </div>
+      )}
     </div>
   )
 }

@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useParams, Link, useNavigate } from 'react-router-dom'
-import { getCourseById, getTrailById } from '../../data/courses'
+import { getCourseById as getStaticCourseById, getTrailById } from '../../data/courses'
+import { useCreatorCourses } from '../../hooks/useCreatorCourses'
 import { useCourseProgress } from '../../hooks/useCourseProgress'
 import {
   Clock, PlayCircle, ChevronDown, CheckCircle2,
@@ -19,10 +20,14 @@ function ProgressBar({ percent, color }) {
 export default function CourseDetailPage() {
   const { courseId } = useParams()
   const navigate = useNavigate()
-  const course = getCourseById(courseId)
+  const { getCourseById: getCreatorCourse } = useCreatorCourses()
+  const staticCourse = getStaticCourseById(courseId)
+  const creatorCourse = getCreatorCourse(courseId)
+  const course = creatorCourse || staticCourse
+
   const { isLessonDone, getCourseProgress, getFirstUnfinishedLesson } = useCourseProgress()
   const [openModules, setOpenModules] = useState(
-    course ? { [course.modules[0]?.id]: true } : {}
+    course && course.modules ? { [course.modules[0]?.id]: true } : {}
   )
 
   if (!course) {
@@ -34,10 +39,29 @@ export default function CourseDetailPage() {
     )
   }
 
-  const trail = getTrailById(course.trailId)
-  const { done, total, percent } = getCourseProgress(courseId)
-  const firstUnfinished = getFirstUnfinishedLesson(courseId)
-  const allLessons = course.modules.flatMap(m => m.lessons)
+  let done = 0
+  let total = 0
+  let percent = 0
+  let firstUnfinished = null
+  let trail = null
+
+  if (creatorCourse) {
+    const allLessons = course.modules?.flatMap(m => m.lessons) || []
+    total = allLessons.length
+    done = allLessons.filter(l => isLessonDone(l.id)).length
+    percent = total === 0 ? 0 : Math.round((done / total) * 100)
+    firstUnfinished = allLessons.find(l => !isLessonDone(l.id)) || allLessons[0]
+    trail = { color: 'var(--color-primary)', colorLight: 'var(--color-surface)', label: 'Curso Adaptado', thumb: course.thumb || '/history_course_cover.png' }
+  } else {
+    trail = getTrailById(course.trailId)
+    const progress = getCourseProgress(courseId)
+    done = progress.done
+    total = progress.total
+    percent = progress.percent
+    firstUnfinished = getFirstUnfinishedLesson(courseId)
+  }
+
+  const allLessons = course.modules?.flatMap(m => m.lessons) || []
 
   function toggleModule(modId) {
     setOpenModules(prev => ({ ...prev, [modId]: !prev[modId] }))
@@ -46,8 +70,8 @@ export default function CourseDetailPage() {
   return (
     <div className="course-detail-page animate-fade-in">
       {/* Back */}
-      <button className="back-btn" onClick={() => navigate('/cursos')}>
-        <ArrowLeft size={16} /> Catálogo
+      <button className="back-btn" onClick={() => navigate(creatorCourse ? '/meus-cursos' : '/cursos')}>
+        <ArrowLeft size={16} /> {creatorCourse ? 'Meus Cursos' : 'Catálogo'}
       </button>
 
       {/* Hero */}
@@ -77,7 +101,7 @@ export default function CourseDetailPage() {
           </div>
           {firstUnfinished && (
             <Link
-              to={`/cursos/${courseId}/aulas/${firstUnfinished.id}`}
+              to={creatorCourse ? `/meus-cursos/${courseId}/view/aulas/${firstUnfinished.id}` : `/cursos/${courseId}/aulas/${firstUnfinished.id}`}
               id="btn-continue-course"
               className="course-continue-btn"
               style={{ background: trail.color }}
@@ -127,7 +151,7 @@ export default function CourseDetailPage() {
                       return (
                         <li key={lesson.id}>
                           <Link
-                            to={`/cursos/${courseId}/aulas/${lesson.id}`}
+                            to={creatorCourse ? `/meus-cursos/${courseId}/view/aulas/${lesson.id}` : `/cursos/${courseId}/aulas/${lesson.id}`}
                             id={`lesson-link-${lesson.id}`}
                             className={`lesson-item ${done ? 'done' : ''}`}
                           >
