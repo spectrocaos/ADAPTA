@@ -1,0 +1,10 @@
+{
+  "buildCommand": "cd adapta-area-de-membros && npm install && npm run build",
+  "outputDirectory": "adapta-area-de-membros/dist",
+  "rewrites": [
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
+    }
+  ]
+}
