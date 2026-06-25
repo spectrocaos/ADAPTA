@@ -7,34 +7,32 @@ export function useLibrary() {
   const [profiles, setProfiles] = useState([])
 
   // Sincronizar Materiais
-  useEffect(() => {
+  const loadMaterials = useCallback(async () => {
     if (!user?.id) return
+    const token = localStorage.getItem('adapta_token')
+    if (!token) return
 
-    const loadMaterials = () => {
-      const stored = localStorage.getItem('adapta_materials')
-      let list = stored ? JSON.parse(stored) : []
-      
-      if (user.profile === 'teacher') {
-        list = list.filter(m => m.createdBy === user.id)
+    try {
+      const response = await fetch('/api/materials', {
+        headers: { 'Authorization': `Bearer ${token}` }
+      })
+      if (response.ok) {
+        let list = await response.json()
+        list = list.map(m => ({ ...m, adapted: m.content || m.adapted }))
+        setMaterials(list)
       }
-      
-      list.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
-      setMaterials(list)
-    }
-
-    loadMaterials()
-    
-    // Configurar listener para atualizações de outras janelas/abas
-    window.addEventListener('storage', loadMaterials)
-    
-    // Criamos um evento customizado para mesma aba
-    window.addEventListener('adapta_materials_changed', loadMaterials)
-
-    return () => {
-      window.removeEventListener('storage', loadMaterials)
-      window.removeEventListener('adapta_materials_changed', loadMaterials)
+    } catch (error) {
+      console.error('Erro ao carregar materiais', error)
     }
   }, [user])
+
+  useEffect(() => {
+    loadMaterials()
+    window.addEventListener('adapta_materials_changed', loadMaterials)
+    return () => {
+      window.removeEventListener('adapta_materials_changed', loadMaterials)
+    }
+  }, [loadMaterials])
 
   // Sincronizar Perfis de Conversão (apenas para Professor)
   useEffect(() => {
@@ -63,28 +61,41 @@ export function useLibrary() {
   
   const saveMaterial = useCallback(async (materialData) => {
     if (!user?.id) return
-    const newMaterial = {
-      id: crypto.randomUUID(),
-      createdAt: new Date().toISOString(),
-      createdBy: user.id,
-      ...materialData
+    const token = localStorage.getItem('adapta_token')
+    if (!token) return
+
+    try {
+      const response = await fetch('/api/materials', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify(materialData)
+      })
+      if (response.ok) {
+        window.dispatchEvent(new Event('adapta_materials_changed'))
+      }
+    } catch (error) {
+      console.error('Erro ao salvar material', error)
     }
-    
-    const stored = localStorage.getItem('adapta_materials')
-    const list = stored ? JSON.parse(stored) : []
-    list.push(newMaterial)
-    
-    localStorage.setItem('adapta_materials', JSON.stringify(list))
-    window.dispatchEvent(new Event('adapta_materials_changed'))
   }, [user])
 
   const deleteMaterial = useCallback(async (id) => {
-    const stored = localStorage.getItem('adapta_materials')
-    if (!stored) return
-    let list = JSON.parse(stored)
-    list = list.filter(m => m.id !== id)
-    localStorage.setItem('adapta_materials', JSON.stringify(list))
-    window.dispatchEvent(new Event('adapta_materials_changed'))
+    const token = localStorage.getItem('adapta_token')
+    if (!token) return
+
+    try {
+      const response = await fetch(`/api/materials/${id}`, {
+        method: 'DELETE',
+        headers: { 'Authorization': `Bearer ${token}` }
+      })
+      if (response.ok) {
+        window.dispatchEvent(new Event('adapta_materials_changed'))
+      }
+    } catch (error) {
+      console.error('Erro ao deletar material', error)
+    }
   }, [])
 
   // ── Salvar/Deletar Perfis de Conversão ────────────────────────────────────

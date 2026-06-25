@@ -9,85 +9,100 @@ export function AuthProvider({ children }) {
   const isAuthenticated = !!user
 
   useEffect(() => {
-    // Carregar usuário do localStorage
+    // Carregar usuário e token do localStorage
     const savedUser = localStorage.getItem('adapta_user')
-    if (savedUser) {
-      setUser(JSON.parse(savedUser))
+    const token = localStorage.getItem('adapta_token')
+    
+    if (savedUser && token && savedUser !== 'undefined') {
+      try {
+        setUser(JSON.parse(savedUser))
+      } catch (err) {
+        logout()
+      }
+    } else {
+      logout() // Limpa os dados se faltar algum
     }
     setLoading(false)
   }, [])
 
   async function register({ name, email, password, profile, condition }) {
-    // Simula delay de rede
-    await new Promise(r => setTimeout(r, 600))
-    
-    const existingUsersStr = localStorage.getItem('adapta_all_users') || '[]'
-    let existingUsers = JSON.parse(existingUsersStr)
-    
-    const existingUserIndex = existingUsers.findIndex(u => u.email === email)
-    let newUser
-    
-    if (existingUserIndex > -1) {
-      // Atualiza o usuário existente para simulação sem erros
-      newUser = {
-        ...existingUsers[existingUserIndex],
-        name,
-        password,
-        profile,
-        condition: condition || null,
-      }
-      existingUsers[existingUserIndex] = newUser
-    } else {
-      // Cria um novo
-      newUser = {
-        id: crypto.randomUUID(),
-        name,
-        email,
-        password, // Não seguro para prod, mas ok para local mock
-        profile,
-        condition: condition || null,
-        onboarded: false,
-        createdAt: new Date().toISOString(),
-      }
-      existingUsers.push(newUser)
-    }
+    try {
+      const response = await fetch('/api/auth/register', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name, email, password, profile, condition })
+      })
 
-    localStorage.setItem('adapta_all_users', JSON.stringify(existingUsers))
-    localStorage.setItem('adapta_user', JSON.stringify(newUser))
-    setUser(newUser)
-    return { success: true, user: newUser }
+      const data = await response.json()
+
+      if (response.ok) {
+        localStorage.setItem('adapta_user', JSON.stringify(data.user))
+        localStorage.setItem('adapta_token', data.token)
+        setUser(data.user)
+        return { success: true, user: data.user }
+      } else {
+        return { success: false, error: data.message || 'Erro ao registrar.' }
+      }
+    } catch (error) {
+      return { success: false, error: 'Erro de conexão com o servidor.' }
+    }
   }
 
   async function login({ email, password }) {
-    await new Promise(r => setTimeout(r, 600))
-    const existingUsersStr = localStorage.getItem('adapta_all_users') || '[]'
-    const existingUsers = JSON.parse(existingUsersStr)
-    
-    const u = existingUsers.find(u => u.email === email && u.password === password)
-    if (u) {
-      localStorage.setItem('adapta_user', JSON.stringify(u))
-      setUser(u)
-      return { success: true, user: u }
+    try {
+      const response = await fetch('/api/auth/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password })
+      })
+
+      const data = await response.json()
+
+      if (response.ok) {
+        localStorage.setItem('adapta_user', JSON.stringify(data.user))
+        localStorage.setItem('adapta_token', data.token)
+        setUser(data.user)
+        return { success: true, user: data.user }
+      } else {
+        return { success: false, error: data.message || 'E-mail ou senha inválidos.' }
+      }
+    } catch (error) {
+      return { success: false, error: 'Erro de conexão com o servidor.' }
     }
-    return { success: false, error: 'E-mail ou senha inválidos.' }
   }
 
   async function logout() {
     localStorage.removeItem('adapta_user')
+    localStorage.removeItem('adapta_token')
     setUser(null)
   }
 
   async function updateUser(updates) {
     if (!user?.id) return
-    const updated = { ...user, ...updates }
-    localStorage.setItem('adapta_user', JSON.stringify(updated))
-    setUser(updated)
     
-    // Atualiza também na lista global
-    const existingUsersStr = localStorage.getItem('adapta_all_users') || '[]'
-    let existingUsers = JSON.parse(existingUsersStr)
-    existingUsers = existingUsers.map(u => u.id === updated.id ? updated : u)
-    localStorage.setItem('adapta_all_users', JSON.stringify(existingUsers))
+    const token = localStorage.getItem('adapta_token')
+    
+    try {
+      const response = await fetch(`/api/users/${user.id}`, {
+        method: 'PUT',
+        headers: { 
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify(updates)
+      })
+
+      const data = await response.json()
+
+      if (response.ok) {
+        localStorage.setItem('adapta_user', JSON.stringify(data.user))
+        setUser(data.user)
+      } else {
+        console.error('Erro ao atualizar usuário:', data.message)
+      }
+    } catch (error) {
+      console.error('Erro de conexão ao atualizar usuário:', error)
+    }
   }
 
   return (
